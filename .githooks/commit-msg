@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Scans the COMMIT MESSAGE body ($1 = message file) — the channel a staged-file
+# scan is completely blind to (an accidental env/typeset/$(...) capture in the
+# message never touches a file).
+command -v gitleaks >/dev/null 2>&1 || { echo "⚠️  gitleaks not installed — skipping" >&2; exit 0; }
+gitleaks detect --no-git --source "$1" --config .gitleaks.toml --redact -v || {   # v8.19+: gitleaks dir "$1"
+  echo "❌ gitleaks: secret in the commit MESSAGE — commit blocked" >&2; exit 1; }

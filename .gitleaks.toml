@@ -1,0 +1,30 @@
+title = "vt-proxy gitleaks config"
+
+[extend]
+useDefault = true                    # keep the FULL built-in ruleset; rules below only ADD coverage
+
+[allowlist]                          # v8.25+: [[allowlists]]
+description = "false positives"
+paths = ['''\.gitleaks\.toml''']     # don't scan our own config (it carries rule regexes)
+# regexes = ['''YOUR_[A-Z_]*_(KEY|TOKEN)''']   # add real FPs here as they appear
+
+# --- ADD-ON rules: ids are unique + jw-prefixed so no built-in rule is ever overridden ---
+
+# A VirusTotal API key is 64 hex chars with no distinctive prefix — the same shape
+# as a SHA-256 hash, which this project handles constantly. The rule therefore
+# requires an assignment context (VT_API_KEY=..., virustotal_key: "...") instead of
+# matching bare 64-hex; bare high-entropy secrets stay covered by the built-in
+# generic-api-key/entropy rules.
+[[rules]]
+id = "jw-virustotal-key"
+description = "VirusTotal API key in an assignment"
+regex = '''(?i)\b(?:virustotal|vt)[_-]?(?:api[_-]?)?key\b\s*[:=]\s*['"]?[0-9a-f]{64}\b'''
+keywords = ["virustotal", "vt_key", "vt-key", "vtkey", "vt_api", "vt-api"]
+
+# More field-proven add-ons, same shape, if these providers ever get used here:
+#   ghp_[0-9A-Za-z]{36}                         github-pat-classic     keyword ghp_
+#   github_pat_[0-9A-Za-z_]{22,255}             github-pat-finegrained
+#   sk-ant-api03-[0-9A-Za-z_-]{80,120}          anthropic
+#   sk-or-v1-[0-9a-f]{64}                       openrouter
+#   gsk_[0-9A-Za-z]{40,60}                      groq
+#   AIza[0-9A-Za-z_-]{35}                       google (also a built-in; add for certainty)
