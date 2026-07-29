@@ -63,8 +63,8 @@ Upstream mapping: `/files/{hash}`, `/ip_addresses/{ip}`, `/domains/{domain}`,
 
 ## 5. Score endpoints — request
 
-Identical body for all five (uniform `artifact` field replaces the old
-per-type field names):
+Identical body for all five — one uniform `artifact` field regardless of
+IOC type:
 
 ```json
 {
@@ -145,9 +145,8 @@ Envelope rules:
 2. Type determined → dispatch internally to the matching typed logic; the
    response is byte-for-byte what the typed endpoint would return (with
    `query.type` filled in).
-3. Type undetermined → `422 INVALID_ARTIFACT`. VT is not consulted.
-   (The old service answered `known: false` here; a caller error is now
-   distinguished from VT ignorance.) `[D6]`
+3. Type undetermined → `422 INVALID_ARTIFACT`. VT is not consulted — a
+   caller error is not the same as VT ignorance. `[D6]`
 
 Hash note: ioc-typing reports `hash`; the envelope and endpoint naming use
 `file` (the VT object the hash addresses).
@@ -204,7 +203,7 @@ Response:
 - Projection dates are converted to ISO-8601 UTC (we own these fields; raw VT
   epochs remain available via the follow-up score call).
 - Zero matches → `known: false`, `matches: []`, `total_hits: 0`, HTTP 200.
-- The old single-hash behavior is `matches[0].sha256`.
+- Callers that just want "the hash for this name" take `matches[0].sha256`.
 
 ## 9. Error contract
 
@@ -278,11 +277,10 @@ All approved by the maintainer, 2026-07-29:
 - **[D1] POST-for-read everywhere.**
 - **[D2] `/v1` path prefix.**
 - **[D3] Omni at bare `POST /v1/score`** (over a `/v1/score/auto` variant).
-- **[D4] `positives_thresh` optional, default 1** — the old service required
-  it on every call.
+- **[D4] `positives_thresh` optional, default 1.**
 - **[D5] `verdict.stats` duplicates report data** — deliberate convenience.
 - **[D6] Undetermined omni artifact → 422** — a caller error is not VT
-  ignorance (the old service answered `known: false`).
+  ignorance.
 - **[D7] Search returns trimmed projections** (field list in §8) — full
   objects are one `/v1/score/file` call away.
 - **[D8] VT auth failures surface as 502 `UPSTREAM_AUTH`, not 401** — a 401
