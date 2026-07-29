@@ -34,6 +34,7 @@ this file records what the API actually does.
 |---|---|---|
 | `file_eicar_by_md5.json` | `GET /files/44d88612fea8a8f36de82e1278abb02f` (EICAR, by md5) | 200 |
 | `ip_google_dns.json` | `GET /ip_addresses/8.8.8.8` | 200 |
+| `ip6_google_dns.json` | `GET /ip_addresses/2001:4860:4860::8888` (IPv6) | 200 |
 | `domain_example_com.json` | `GET /domains/example.com` | 200 |
 | `url_example_com.json` | `GET /urls/aHR0cDovL2V4YW1wbGUuY29tLw` (`http://example.com/`) | 200 |
 | `intel_search_eicar_by_name.json` | `GET /intelligence/search?query=name:"eicar.com" fs:2025-01-01+&limit=5` | 200 |
@@ -104,7 +105,13 @@ e.g. EICAR 3788, 8.8.8.8 556), `total_votes`, `threat_severity`, and for files
   The returned `data.id` is a different, internal sha256-style URL id
   (`2a1b40...9a067`). Both identify the object; `attributes.url` carries the
   canonical URL (`http://example.com/` — trailing slash added).
-- **Domains / IPs**: id is the domain/IP verbatim.
+- **Domains / IPv4**: id is the domain/IP verbatim.
+- **IPv6**: fully supported. Both the compressed (`2001:4860:4860::8888`) and
+  expanded (`2001:4860:4860:0:0:0:0:8888`) forms are accepted; `data.id`
+  comes back normalized to the compressed form. Object shape and stats
+  buckets identical to IPv4. ioc-typing 0.3.0 classifies both forms as
+  `type_pri: 'ip'` (`type_sec: 'v6'`), so omni dispatch needs no extra
+  branching — IPv6 is in scope for v1.
 
 ## 5. Dates
 

@@ -30,6 +30,7 @@ vt_get() {  # $1=fixture-name  $2=path-with-query  [$3=key-override]
 # --- the four canonical lookups -------------------------------------------
 vt_get file_eicar_by_md5   "/files/44d88612fea8a8f36de82e1278abb02f"
 vt_get ip_google_dns       "/ip_addresses/8.8.8.8"
+vt_get ip6_google_dns      "/ip_addresses/2001:4860:4860::8888"
 vt_get domain_example_com  "/domains/example.com"
 
 URLID=$(python3 -c "import base64; print(base64.urlsafe_b64encode(b'http://example.com/').decode().rstrip('='))")

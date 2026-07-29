@@ -9,6 +9,7 @@ contains it. These files double as offline test fixtures.
 |---|---|---|
 | `file_eicar_by_md5.json` | `GET /files/44d88612fea8a8f36de82e1278abb02f` (EICAR by md5; note `data.id` comes back as sha256) | 200 |
 | `ip_google_dns.json` | `GET /ip_addresses/8.8.8.8` | 200 |
+| `ip6_google_dns.json` | `GET /ip_addresses/2001:4860:4860::8888` (IPv6; expanded form also accepted, id normalized to compressed) | 200 |
 | `domain_example_com.json` | `GET /domains/example.com` | 200 |
 | `url_example_com.json` | `GET /urls/aHR0cDovL2V4YW1wbGUuY29tLw` — id is `base64url("http://example.com/")` without padding | 200 |
 | `intel_search_eicar_by_name.json` | `GET /intelligence/search?query=name:"eicar.com" fs:2025-01-01+&limit=5` | 200 |

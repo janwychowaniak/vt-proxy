@@ -51,7 +51,7 @@ services) a **simpler and more stable contract than raw VT**:
 | Endpoint | Purpose |
 |---|---|
 | `POST /v1/score/file` | reputation of a file by hash (md5/sha1/sha256) |
-| `POST /v1/score/ip` | reputation of an IPv4 address |
+| `POST /v1/score/ip` | reputation of an IP address (IPv4 or IPv6) |
 | `POST /v1/score/domain` | reputation of a domain / FQDN |
 | `POST /v1/score/url` | reputation of a URL |
 | `POST /v1/score` | **omni**: auto-detect artifact type, then behave as the matching endpoint `[D3]` |
@@ -290,7 +290,6 @@ All approved by the maintainer, 2026-07-29:
 
 - Response caching / TTL (would save quota; revisit after v1).
 - Quota introspection endpoint (`/users/{id}/overall_quotas`).
-- IPv6 (ioc-typing scope to verify; VT supports it — revisit on demand).
 - Batch endpoints (multiple artifacts per call).
 - Any write-path VT features (rescan, comments, submissions) — **permanently**
   out, per §2.
