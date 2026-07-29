@@ -1,0 +1,3780 @@
+{
+  "data": [
+    {
+      "id": "f4041df12ec3d79722af2cf64a1dbce9de928b773c61e11aaa9359e7fdbb6ac0",
+      "type": "file",
+      "links": {
+        "self": "https://www.virustotal.com/api/v3/files/f4041df12ec3d79722af2cf64a1dbce9de928b773c61e11aaa9359e7fdbb6ac0"
+      },
+      "attributes": {
+        "type_tags": [
+          "source",
+          "powershell",
+          "ps",
+          "ps1"
+        ],
+        "crowdsourced_ids_stats": {
+          "high": 0,
+          "medium": 0,
+          "low": 1,
+          "info": 0
+        },
+        "sha1": "9f45ae3ae43708d07f7af586d5e411256b7716aa",
+        "popular_threat_classification": {
+          "popular_threat_name": [
+            {
+              "count": 51,
+              "value": "eicar"
+            },
+            {
+              "count": 41,
+              "value": "test"
+            },
+            {
+              "count": 31,
+              "value": "file"
+            }
+          ],
+          "suggested_threat_label": "virus.eicar/test",
+          "popular_threat_category": [
+            {
+              "count": 15,
+              "value": "virus"
+            }
+          ]
+        },
+        "trid": [
+          {
+            "file_type": "EICAR antivirus test file",
+            "probability": 100.0
+          }
+        ],
+        "type_extension": "ps1",
+        "tags": [
+          "powershell",
+          "detect-debug-environment",
+          "long-sleeps"
+        ],
+        "filecondis": {
+          "dhash": "ba00a882a0808080",
+          "raw_md5": "8cfb45c23d78b9f07d6d4ee4042a4a06"
+        },
+        "crowdsourced_ids_results": [
+          {
+            "rule_category": "protocol-command-decode",
+            "alert_severity": "low",
+            "rule_msg": "(tcp) experimental TCP options found",
+            "rule_id": "116:58",
+            "rule_source": "Snort registered user ruleset",
+            "rule_url": "https://www.snort.org/downloads/#rule-downloads",
+            "rule_raw": "alert ( gid:116; sid:58; rev:2; msg:\"(tcp) experimental TCP options found\"; metadata: policy max-detect-ips drop, rule-type decode; classtype:protocol-command-decode;)",
+            "alert_context": [
+              {
+                "src_ip": "8.8.8.8",
+                "src_port": 53
+              }
+            ]
+          }
+        ],
+        "last_analysis_stats": {
+          "malicious": 56,
+          "suspicious": 0,
+          "undetected": 11,
+          "harmless": 0,
+          "timeout": 0,
+          "confirmed-timeout": 0,
+          "failure": 1,
+          "type-unsupported": 7
+        },
+        "crowdsourced_yara_results": [
+          {
+            "ruleset_id": "0019ab4291",
+            "ruleset_version": "0019ab4291|fc51a3fe3b450838614a5a5aa327c6bd8689cbb2",
+            "ruleset_name": "MALW_Eicar",
+            "rule_name": "malw_eicar",
+            "match_date": 1785331443,
+            "description": "Rule to detect the EICAR pattern",
+            "author": "Marc Rivero | McAfee ATR Team",
+            "source": "https://github.com/advanced-threat-research/Yara-Rules"
+          },
+          {
+            "ruleset_id": "015dce072d",
+            "ruleset_version": "015dce072d|195c9611ddb90db599d7ffc1a9b0e8c45688007d",
+            "ruleset_name": "Multi_EICAR",
+            "rule_name": "Multi_EICAR_ac8f42d6",
+            "match_date": 1785331443,
+            "author": "Elastic Security",
+            "source": "https://github.com/elastic/protections-artifacts"
+          }
+        ],
+        "first_submission_date": 1777550931,
+        "total_votes": {
+          "harmless": 0,
+          "malicious": 1
+        },
+        "sandbox_verdicts": {
+          "Zenbox": {
+            "category": "malicious",
+            "malware_classification": [
+              "MALWARE",
+              "TROJAN"
+            ],
+            "sandbox_name": "Zenbox",
+            "malware_names": [
+              "EICAR"
+            ],
+            "confidence": 48
+          }
+        },
+        "size": 127,
+        "type_tag": "powershell",
+        "last_submission_date": 1785331442,
+        "exiftool": {
+          "MIMEType": "text/plain",
+          "FileType": "TXT",
+          "WordCount": "1",
+          "LineCount": "16",
+          "MIMEEncoding": "us-ascii",
+          "FileTypeExtension": "txt",
+          "Newlines": "Macintosh CR"
+        },
+        "ssdeep": "3:a+JraNvsgzsVqSwHqTGF1kFv3oimPFbason:tJuOgzskrov3iP5aJ",
+        "md5": "6a9f6c15ac2b8f80a60c0103539c9ebd",
+        "last_analysis_results": {
+          "Bkav": {
+            "method": "blacklist",
+            "engine_name": "Bkav",
+            "engine_version": "8.2.40(8338)",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Lionic": {
+            "method": "blacklist",
+            "engine_name": "Lionic",
+            "engine_version": "8.16",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Test.File.EICAR.y!c"
+          },
+          "Elastic": {
+            "method": "blacklist",
+            "engine_name": "Elastic",
+            "engine_version": "4.0.276",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "eicar"
+          },
+          "MicroWorld-eScan": {
+            "method": "blacklist",
+            "engine_name": "MicroWorld-eScan",
+            "engine_version": "14.0.409.0",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR-Test-File"
+          },
+          "ClamAV": {
+            "method": "blacklist",
+            "engine_name": "ClamAV",
+            "engine_version": "1.5.3.0",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Eicar-Signature"
+          },
+          "CTX": {
+            "method": "blacklist",
+            "engine_name": "CTX",
+            "engine_version": "2024.8.29.1",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "txt.virus.eicar"
+          },
+          "CAT-QuickHeal": {
+            "method": "blacklist",
+            "engine_name": "CAT-QuickHeal",
+            "engine_version": "22.00",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "EICAR.TestFile"
+          },
+          "Skyhigh": {
+            "method": "blacklist",
+            "engine_name": "Skyhigh",
+            "engine_version": "v2021.2.0+4045",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "EICAR test file"
+          },
+          "ALYac": {
+            "method": "blacklist",
+            "engine_name": "ALYac",
+            "engine_version": "2.0.0.10",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Misc.Eicar-Test-File"
+          },
+          "Malwarebytes": {
+            "method": "blacklist",
+            "engine_name": "Malwarebytes",
+            "engine_version": "3.1.0.246",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR-AV-Test"
+          },
+          "VIPRE": {
+            "method": "blacklist",
+            "engine_name": "VIPRE",
+            "engine_version": "6.0.0.35",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "EICAR-Test-File (not a virus)"
+          },
+          "Sangfor": {
+            "method": "blacklist",
+            "engine_name": "Sangfor",
+            "engine_version": "2.22.3.0",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "EICAR-Test-File (not a virus)"
+          },
+          "K7AntiVirus": {
+            "method": "blacklist",
+            "engine_name": "K7AntiVirus",
+            "engine_version": "14.66.60270",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR_Test_File"
+          },
+          "BitDefender": {
+            "method": "blacklist",
+            "engine_name": "BitDefender",
+            "engine_version": "7.2",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR-Test-File (not a virus)"
+          },
+          "K7GW": {
+            "method": "blacklist",
+            "engine_name": "K7GW",
+            "engine_version": "14.66.60271",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR_Test_File"
+          },
+          "CrowdStrike": {
+            "method": "blacklist",
+            "engine_name": "CrowdStrike",
+            "engine_version": "1.0",
+            "engine_update": "20251219",
+            "category": "undetected",
+            "result": null
+          },
+          "VirIT": {
+            "method": "blacklist",
+            "engine_name": "VirIT",
+            "engine_version": "9.5.1258",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "EICAR-Test-File"
+          },
+          "Symantec": {
+            "method": "blacklist",
+            "engine_name": "Symantec",
+            "engine_version": "1.22.0.0",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR Test String"
+          },
+          "ESET-NOD32": {
+            "method": "blacklist",
+            "engine_name": "ESET-NOD32",
+            "engine_version": "18.2.18.0",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Eicar test file"
+          },
+          "Zoner": {
+            "method": "blacklist",
+            "engine_name": "Zoner",
+            "engine_version": "2.2.2.0",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR.Test.File-NoVirus.250"
+          },
+          "TrendMicro-HouseCall": {
+            "method": "blacklist",
+            "engine_name": "TrendMicro-HouseCall",
+            "engine_version": "24.550.0.1002",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Eicar_test_file"
+          },
+          "Avast": {
+            "method": "blacklist",
+            "engine_name": "Avast",
+            "engine_version": "23.9.8494.0",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "EICAR Test-NOT virus!!!"
+          },
+          "Cynet": {
+            "method": "blacklist",
+            "engine_name": "Cynet",
+            "engine_version": "4.0.3.4",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Malicious (score: 99)"
+          },
+          "Kaspersky": {
+            "method": "blacklist",
+            "engine_name": "Kaspersky",
+            "engine_version": "22.0.1.28",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR-Test-File"
+          },
+          "Alibaba": {
+            "method": "blacklist",
+            "engine_name": "Alibaba",
+            "engine_version": "0.3.0.5",
+            "engine_update": "20190527",
+            "category": "malicious",
+            "result": "Virus:Win32/EICAR.A"
+          },
+          "NANO-Antivirus": {
+            "method": "blacklist",
+            "engine_name": "NANO-Antivirus",
+            "engine_version": "1.0.170.26895",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Marker.Dos.EICAR-Test-File.dyb"
+          },
+          "ViRobot": {
+            "method": "blacklist",
+            "engine_name": "ViRobot",
+            "engine_version": "2014.3.20.0",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR-test"
+          },
+          "Rising": {
+            "method": "blacklist",
+            "engine_name": "Rising",
+            "engine_version": "25.0.0.28",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Virus.EICARTestFile!1.103DB (CLASSIC)"
+          },
+          "Sophos": {
+            "method": "blacklist",
+            "engine_name": "Sophos",
+            "engine_version": "3.6.2.0",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR-AV-Test"
+          },
+          "F-Secure": {
+            "method": "blacklist",
+            "engine_name": "F-Secure",
+            "engine_version": "18.10.1547.307",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR_Test_File"
+          },
+          "DrWeb": {
+            "method": "blacklist",
+            "engine_name": "DrWeb",
+            "engine_version": "7.0.75.2070",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR Test File (NOT a Virus!)"
+          },
+          "Zillya": {
+            "method": "blacklist",
+            "engine_name": "Zillya",
+            "engine_version": "2.0.0.5654",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "TrendMicro": {
+            "method": "blacklist",
+            "engine_name": "TrendMicro",
+            "engine_version": "24.550.0.1002",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Eicar_test_file"
+          },
+          "McAfeeD": {
+            "method": "blacklist",
+            "engine_name": "McAfeeD",
+            "engine_version": "1.2.0.15534",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "ti!F4041DF12EC3"
+          },
+          "CMC": {
+            "method": "blacklist",
+            "engine_name": "CMC",
+            "engine_version": "2.4.2022.1",
+            "engine_update": "20260728",
+            "category": "undetected",
+            "result": null
+          },
+          "Emsisoft": {
+            "method": "blacklist",
+            "engine_name": "Emsisoft",
+            "engine_version": "2024.8.0.61147",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR-Test-File (not a virus) (B)"
+          },
+          "huorong": {
+            "method": "blacklist",
+            "engine_name": "huorong",
+            "engine_version": "359ba70:359ba70:bb42f6e:bb42f6e",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "TEST/AVEngTestFile!EICAR"
+          },
+          "GData": {
+            "method": "blacklist",
+            "engine_name": "GData",
+            "engine_version": "GD:27.45426AVA:64.31656",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR_TEST_FILE"
+          },
+          "Jiangmin": {
+            "method": "blacklist",
+            "engine_name": "Jiangmin",
+            "engine_version": "16.0.100",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR-Test-File"
+          },
+          "Webroot": {
+            "method": "blacklist",
+            "engine_name": "Webroot",
+            "engine_version": "1.9.0.8",
+            "engine_update": "20250227",
+            "category": "malicious",
+            "result": "W32.Eicar.Testvirus.Gen"
+          },
+          "Google": {
+            "method": "blacklist",
+            "engine_name": "Google",
+            "engine_version": "1785222057",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Detected"
+          },
+          "Avira": {
+            "method": "blacklist",
+            "engine_name": "Avira",
+            "engine_version": "8.3.3.24",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Eicar-Test-Signature"
+          },
+          "Antiy-AVL": {
+            "method": "blacklist",
+            "engine_name": "Antiy-AVL",
+            "engine_version": "3.0",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "TestFile/DOS.EICAR"
+          },
+          "Kingsoft": {
+            "method": "blacklist",
+            "engine_name": "Kingsoft",
+            "engine_version": "None",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Microsoft": {
+            "method": "blacklist",
+            "engine_name": "Microsoft",
+            "engine_version": "1.1.26060.3008",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Virus:DOS/EICAR_Test_File"
+          },
+          "Gridinsoft": {
+            "method": "blacklist",
+            "engine_name": "Gridinsoft",
+            "engine_version": "1.0.250.174",
+            "engine_update": "20260728",
+            "category": "undetected",
+            "result": null
+          },
+          "Xcitium": {
+            "method": "blacklist",
+            "engine_name": "Xcitium",
+            "engine_version": "38839",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Arcabit": {
+            "method": "blacklist",
+            "engine_name": "Arcabit",
+            "engine_version": "2025.0.0.23",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR-Test-File (not a virus)"
+          },
+          "SUPERAntiSpyware": {
+            "method": "blacklist",
+            "engine_name": "SUPERAntiSpyware",
+            "engine_version": "5.6.0.1032",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "NotAThreat.EICAR[TestFile]"
+          },
+          "ZoneAlarm": {
+            "method": "blacklist",
+            "engine_name": "ZoneAlarm",
+            "engine_version": "6.26-117392500",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR-AV-Test"
+          },
+          "Avast-Mobile": {
+            "method": "blacklist",
+            "engine_name": "Avast-Mobile",
+            "engine_version": "260727-04",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "Eicar"
+          },
+          "Varist": {
+            "method": "blacklist",
+            "engine_name": "Varist",
+            "engine_version": "6.6.1.3",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR_Test_File"
+          },
+          "AhnLab-V3": {
+            "method": "blacklist",
+            "engine_name": "AhnLab-V3",
+            "engine_version": "3.30.1.10706",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "Virus/EICAR_Test_File"
+          },
+          "Acronis": {
+            "method": "blacklist",
+            "engine_name": "Acronis",
+            "engine_version": "1.2.0.121",
+            "engine_update": "20240328",
+            "category": "undetected",
+            "result": null
+          },
+          "VBA32": {
+            "method": "blacklist",
+            "engine_name": "VBA32",
+            "engine_version": "5.6.1",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "EICAR-Test-File"
+          },
+          "TACHYON": {
+            "method": "blacklist",
+            "engine_name": "TACHYON",
+            "engine_version": "2026-07-28.02",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR-Test-File"
+          },
+          "APEX": {
+            "method": "blacklist",
+            "engine_name": "APEX",
+            "engine_version": "6.802",
+            "engine_update": "20260725",
+            "category": "malicious",
+            "result": "EICAR Anti-Virus Test File"
+          },
+          "Tencent": {
+            "method": "blacklist",
+            "engine_name": "Tencent",
+            "engine_version": "1.0.0.1",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR.TEST.NOT-A-VIRUS"
+          },
+          "Yandex": {
+            "method": "blacklist",
+            "engine_name": "Yandex",
+            "engine_version": "5.5.2.24",
+            "engine_update": "20260728",
+            "category": "undetected",
+            "result": null
+          },
+          "TrellixENS": {
+            "method": "blacklist",
+            "engine_name": "TrellixENS",
+            "engine_version": "6.0.6.653",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "EICAR test file"
+          },
+          "SentinelOne": {
+            "method": "blacklist",
+            "engine_name": "SentinelOne",
+            "engine_version": "7.7.0.1",
+            "engine_update": "20260714",
+            "category": "malicious",
+            "result": "Static AI - Malicious COM"
+          },
+          "MaxSecure": {
+            "method": "blacklist",
+            "engine_name": "MaxSecure",
+            "engine_version": "1.0.0.1",
+            "engine_update": "20260728",
+            "category": "undetected",
+            "result": null
+          },
+          "Fortinet": {
+            "method": "blacklist",
+            "engine_name": "Fortinet",
+            "engine_version": "7.0.48.0",
+            "engine_update": "20260728",
+            "category": "malicious",
+            "result": "EICAR_TEST_FILE"
+          },
+          "AVG": {
+            "method": "blacklist",
+            "engine_name": "AVG",
+            "engine_version": "23.9.8494.0",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "EICAR Test-NOT virus!!!"
+          },
+          "Panda": {
+            "method": "blacklist",
+            "engine_name": "Panda",
+            "engine_version": "4.6.4.2",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "EICAR-AV-TEST-FILE"
+          },
+          "alibabacloud": {
+            "method": "blacklist",
+            "engine_name": "alibabacloud",
+            "engine_version": "2.2.0",
+            "engine_update": "20250321",
+            "category": "malicious",
+            "result": "Engtest:Multi/Eicar"
+          },
+          "google_safebrowsing": {
+            "method": "blacklist",
+            "engine_name": "google_safebrowsing",
+            "engine_version": "1.0",
+            "engine_update": "20260728",
+            "category": "undetected",
+            "result": null
+          },
+          "Ikarus": {
+            "method": "blacklist",
+            "engine_name": "Ikarus",
+            "engine_version": "6.5.4.0",
+            "engine_update": "20260727",
+            "category": "failure",
+            "result": null
+          },
+          "SymantecMobileInsight": {
+            "method": "blacklist",
+            "engine_name": "SymantecMobileInsight",
+            "engine_version": "2.0",
+            "engine_update": "20260123",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "BitDefenderFalx": {
+            "method": "blacklist",
+            "engine_name": "BitDefenderFalx",
+            "engine_version": "2.0.936",
+            "engine_update": "20260525",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "tehtris": {
+            "method": "blacklist",
+            "engine_name": "tehtris",
+            "engine_version": "v0.1.4",
+            "engine_update": "20260728",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Trapmine": {
+            "method": "blacklist",
+            "engine_name": "Trapmine",
+            "engine_version": "4.0.14.0",
+            "engine_update": "20260708",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Paloalto": {
+            "method": "blacklist",
+            "engine_name": "Paloalto",
+            "engine_version": "0.9.0.1003",
+            "engine_update": "20260728",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Cylance": {
+            "method": "blacklist",
+            "engine_name": "Cylance",
+            "engine_version": "3.0.0.0",
+            "engine_update": "20260723",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Trustlook": {
+            "method": "blacklist",
+            "engine_name": "Trustlook",
+            "engine_version": "1.0",
+            "engine_update": "20260728",
+            "category": "type-unsupported",
+            "result": null
+          }
+        },
+        "times_submitted": 8,
+        "tlsh": "T1C7B09204370D99E6DA2720349A7298740849C71A3AA24FA5A06720A8ED7614B0AA8A34",
+        "magic": "EICAR virus test files",
+        "sha256": "f4041df12ec3d79722af2cf64a1dbce9de928b773c61e11aaa9359e7fdbb6ac0",
+        "names": [
+          "CEPlus.sh",
+          "testfiles/eicar/eicar.com",
+          "eicar.com",
+          "eicar.command",
+          "CEPlus.py",
+          "CEPlus (1).bat",
+          "CEPlus.bat",
+          "testfiles/eicar/eicar.command",
+          "testfiles/eicar/eicar.txt",
+          "testfiles/maclinux/CEPlus.py",
+          "testfiles/maclinux/CEPlus.sh",
+          "testfiles/windows/CEPlus.bat",
+          "eicar.txt"
+        ],
+        "meaningful_name": "CEPlus.sh",
+        "type_description": "Powershell",
+        "last_analysis_date": 1785227899,
+        "available_tools": [
+          "sigcheck"
+        ],
+        "unique_sources": 6,
+        "downloadable": false,
+        "magika": "POWERSHELL",
+        "threat_severity": {
+          "version": 5,
+          "threat_severity_level": "SEVERITY_LOW",
+          "threat_severity_data": {
+            "popular_threat_category": "virus",
+            "num_gav_detections": 3
+          },
+          "last_analysis_date": "1777550951",
+          "level_description": "Severity LOW because it was considered virus. Other contributing factor was that it could not be run in sandboxes."
+        },
+        "reputation": -1,
+        "last_modification_date": 1785331443
+      }
+    },
+    {
+      "id": "7d694b6264f4c42d5f2ce3c5e70f0f10fc13566452c634a376aeb38228fd233a",
+      "type": "file",
+      "links": {
+        "self": "https://www.virustotal.com/api/v3/files/7d694b6264f4c42d5f2ce3c5e70f0f10fc13566452c634a376aeb38228fd233a"
+      },
+      "attributes": {
+        "type_tags": [
+          "source",
+          "powershell",
+          "ps",
+          "ps1"
+        ],
+        "sha1": "fbe4835c50a2dc8d766be262cd9b7d06568e9aa3",
+        "popular_threat_classification": {
+          "popular_threat_name": [
+            {
+              "count": 4,
+              "value": "eicar"
+            },
+            {
+              "count": 2,
+              "value": "test"
+            }
+          ],
+          "suggested_threat_label": "eicar/test"
+        },
+        "type_extension": "ps1",
+        "tags": [
+          "powershell",
+          "long-sleeps",
+          "detect-debug-environment"
+        ],
+        "filecondis": {
+          "dhash": "9300009100008090",
+          "raw_md5": "af60b5185f544042bf468594dc61872f"
+        },
+        "last_analysis_stats": {
+          "malicious": 4,
+          "suspicious": 0,
+          "undetected": 61,
+          "harmless": 0,
+          "timeout": 0,
+          "confirmed-timeout": 0,
+          "failure": 0,
+          "type-unsupported": 12
+        },
+        "first_submission_date": 1771862878,
+        "total_votes": {
+          "harmless": 0,
+          "malicious": 0
+        },
+        "sandbox_verdicts": {
+          "Zenbox": {
+            "category": "harmless",
+            "malware_classification": [
+              "CLEAN"
+            ],
+            "sandbox_name": "Zenbox",
+            "confidence": 97
+          }
+        },
+        "size": 70,
+        "type_tag": "powershell",
+        "last_submission_date": 1785306277,
+        "exiftool": {
+          "MIMEType": "text/plain",
+          "FileType": "TXT",
+          "WordCount": "1",
+          "LineCount": "1",
+          "MIMEEncoding": "us-ascii",
+          "FileTypeExtension": "txt",
+          "Newlines": "(none)"
+        },
+        "ssdeep": "3:aSon19QrvsgzsVqSwHq9:Jo1ywgzsko",
+        "md5": "79caee9864b576e94da277a01be15975",
+        "last_analysis_results": {
+          "Bkav": {
+            "method": "blacklist",
+            "engine_name": "Bkav",
+            "engine_version": "2.0.0.1",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Lionic": {
+            "method": "blacklist",
+            "engine_name": "Lionic",
+            "engine_version": "8.16",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "MicroWorld-eScan": {
+            "method": "blacklist",
+            "engine_name": "MicroWorld-eScan",
+            "engine_version": "14.0.409.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "ClamAV": {
+            "method": "blacklist",
+            "engine_name": "ClamAV",
+            "engine_version": "1.5.1.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "CTX": {
+            "method": "blacklist",
+            "engine_name": "CTX",
+            "engine_version": "2024.8.29.1",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "CAT-QuickHeal": {
+            "method": "blacklist",
+            "engine_name": "CAT-QuickHeal",
+            "engine_version": "22.00",
+            "engine_update": "20260303",
+            "category": "undetected",
+            "result": null
+          },
+          "Skyhigh": {
+            "method": "blacklist",
+            "engine_name": "Skyhigh",
+            "engine_version": "v2021.2.0+4045",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "ALYac": {
+            "method": "blacklist",
+            "engine_name": "ALYac",
+            "engine_version": "2.0.0.10",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Malwarebytes": {
+            "method": "blacklist",
+            "engine_name": "Malwarebytes",
+            "engine_version": "3.1.0.211",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Zillya": {
+            "method": "blacklist",
+            "engine_name": "Zillya",
+            "engine_version": "2.0.0.5555",
+            "engine_update": "20260302",
+            "category": "undetected",
+            "result": null
+          },
+          "Sangfor": {
+            "method": "blacklist",
+            "engine_name": "Sangfor",
+            "engine_version": "2.22.3.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "K7AntiVirus": {
+            "method": "blacklist",
+            "engine_name": "K7AntiVirus",
+            "engine_version": "14.39.58771",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "BitDefender": {
+            "method": "blacklist",
+            "engine_name": "BitDefender",
+            "engine_version": "7.2",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "K7GW": {
+            "method": "blacklist",
+            "engine_name": "K7GW",
+            "engine_version": "14.39.58773",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "CrowdStrike": {
+            "method": "blacklist",
+            "engine_name": "CrowdStrike",
+            "engine_version": "1.0",
+            "engine_update": "20251219",
+            "category": "undetected",
+            "result": null
+          },
+          "Arcabit": {
+            "method": "blacklist",
+            "engine_name": "Arcabit",
+            "engine_version": "2025.0.0.23",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Baidu": {
+            "method": "blacklist",
+            "engine_name": "Baidu",
+            "engine_version": "1.0.0.2",
+            "engine_update": "20190318",
+            "category": "undetected",
+            "result": null
+          },
+          "VirIT": {
+            "method": "blacklist",
+            "engine_name": "VirIT",
+            "engine_version": "9.5.1158",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Symantec": {
+            "method": "blacklist",
+            "engine_name": "Symantec",
+            "engine_version": "1.22.0.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "ESET-NOD32": {
+            "method": "blacklist",
+            "engine_name": "ESET-NOD32",
+            "engine_version": "18.2.18.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "TrendMicro-HouseCall": {
+            "method": "blacklist",
+            "engine_name": "TrendMicro-HouseCall",
+            "engine_version": "24.550.0.1002",
+            "engine_update": "20260304",
+            "category": "malicious",
+            "result": "Eicar_test_1"
+          },
+          "Avast": {
+            "method": "blacklist",
+            "engine_name": "Avast",
+            "engine_version": "23.9.8494.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Cynet": {
+            "method": "blacklist",
+            "engine_name": "Cynet",
+            "engine_version": "4.0.3.4",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Kaspersky": {
+            "method": "blacklist",
+            "engine_name": "Kaspersky",
+            "engine_version": "22.0.1.28",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Alibaba": {
+            "method": "blacklist",
+            "engine_name": "Alibaba",
+            "engine_version": "0.3.0.5",
+            "engine_update": "20190527",
+            "category": "undetected",
+            "result": null
+          },
+          "NANO-Antivirus": {
+            "method": "blacklist",
+            "engine_name": "NANO-Antivirus",
+            "engine_version": "1.0.170.26895",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "ViRobot": {
+            "method": "blacklist",
+            "engine_name": "ViRobot",
+            "engine_version": "2014.3.20.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Tencent": {
+            "method": "blacklist",
+            "engine_name": "Tencent",
+            "engine_version": "1.0.0.1",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Sophos": {
+            "method": "blacklist",
+            "engine_name": "Sophos",
+            "engine_version": "3.3.1.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "F-Secure": {
+            "method": "blacklist",
+            "engine_name": "F-Secure",
+            "engine_version": "18.10.1547.307",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "DrWeb": {
+            "method": "blacklist",
+            "engine_name": "DrWeb",
+            "engine_version": "7.0.75.2070",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "VIPRE": {
+            "method": "blacklist",
+            "engine_name": "VIPRE",
+            "engine_version": "6.0.0.35",
+            "engine_update": "20260303",
+            "category": "undetected",
+            "result": null
+          },
+          "TrendMicro": {
+            "method": "blacklist",
+            "engine_name": "TrendMicro",
+            "engine_version": "24.550.0.1002",
+            "engine_update": "20260304",
+            "category": "malicious",
+            "result": "Eicar_test_1"
+          },
+          "McAfeeD": {
+            "method": "blacklist",
+            "engine_name": "McAfeeD",
+            "engine_version": "1.2.0.14023",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "CMC": {
+            "method": "blacklist",
+            "engine_name": "CMC",
+            "engine_version": "2.4.2022.1",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Emsisoft": {
+            "method": "blacklist",
+            "engine_name": "Emsisoft",
+            "engine_version": "2024.8.0.61147",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "huorong": {
+            "method": "blacklist",
+            "engine_name": "huorong",
+            "engine_version": "7683632:7683632:dcdb01d:dcdb01d",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Jiangmin": {
+            "method": "blacklist",
+            "engine_name": "Jiangmin",
+            "engine_version": "16.0.100",
+            "engine_update": "20260303",
+            "category": "undetected",
+            "result": null
+          },
+          "Webroot": {
+            "method": "blacklist",
+            "engine_name": "Webroot",
+            "engine_version": "1.9.0.8",
+            "engine_update": "20250227",
+            "category": "undetected",
+            "result": null
+          },
+          "Varist": {
+            "method": "blacklist",
+            "engine_name": "Varist",
+            "engine_version": "6.6.1.3",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Avira": {
+            "method": "blacklist",
+            "engine_name": "Avira",
+            "engine_version": "8.3.3.24",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Antiy-AVL": {
+            "method": "blacklist",
+            "engine_name": "Antiy-AVL",
+            "engine_version": "3.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Kingsoft": {
+            "method": "blacklist",
+            "engine_name": "Kingsoft",
+            "engine_version": "None",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Gridinsoft": {
+            "method": "blacklist",
+            "engine_name": "Gridinsoft",
+            "engine_version": "1.0.240.174",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Xcitium": {
+            "method": "blacklist",
+            "engine_name": "Xcitium",
+            "engine_version": "38459",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Microsoft": {
+            "method": "blacklist",
+            "engine_name": "Microsoft",
+            "engine_version": "1.1.26010.1",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "SUPERAntiSpyware": {
+            "method": "blacklist",
+            "engine_name": "SUPERAntiSpyware",
+            "engine_version": "5.6.0.1032",
+            "engine_update": "20260303",
+            "category": "malicious",
+            "result": "NotAThreat.EICAR[TestFile]"
+          },
+          "ZoneAlarm": {
+            "method": "blacklist",
+            "engine_name": "ZoneAlarm",
+            "engine_version": "6.23-113518629",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "GData": {
+            "method": "blacklist",
+            "engine_name": "GData",
+            "engine_version": "GD:27.43734AVA:64.30771",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Google": {
+            "method": "blacklist",
+            "engine_name": "Google",
+            "engine_version": "1772625634",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "AhnLab-V3": {
+            "method": "blacklist",
+            "engine_name": "AhnLab-V3",
+            "engine_version": "3.29.1.10604",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Acronis": {
+            "method": "blacklist",
+            "engine_name": "Acronis",
+            "engine_version": "1.2.0.121",
+            "engine_update": "20240328",
+            "category": "undetected",
+            "result": null
+          },
+          "VBA32": {
+            "method": "blacklist",
+            "engine_name": "VBA32",
+            "engine_version": "5.5.1",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "TACHYON": {
+            "method": "blacklist",
+            "engine_name": "TACHYON",
+            "engine_version": "2026-03-04.02",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Zoner": {
+            "method": "blacklist",
+            "engine_name": "Zoner",
+            "engine_version": "2.2.2.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Rising": {
+            "method": "blacklist",
+            "engine_name": "Rising",
+            "engine_version": "25.0.0.28",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Yandex": {
+            "method": "blacklist",
+            "engine_name": "Yandex",
+            "engine_version": "5.5.2.24",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "TrellixENS": {
+            "method": "blacklist",
+            "engine_name": "TrellixENS",
+            "engine_version": "6.0.6.653",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Ikarus": {
+            "method": "blacklist",
+            "engine_name": "Ikarus",
+            "engine_version": "6.4.16.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "MaxSecure": {
+            "method": "blacklist",
+            "engine_name": "MaxSecure",
+            "engine_version": "1.0.0.1",
+            "engine_update": "20260303",
+            "category": "undetected",
+            "result": null
+          },
+          "Fortinet": {
+            "method": "blacklist",
+            "engine_name": "Fortinet",
+            "engine_version": "7.0.30.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "AVG": {
+            "method": "blacklist",
+            "engine_name": "AVG",
+            "engine_version": "23.9.8494.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Panda": {
+            "method": "blacklist",
+            "engine_name": "Panda",
+            "engine_version": "4.6.4.2",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "alibabacloud": {
+            "method": "blacklist",
+            "engine_name": "alibabacloud",
+            "engine_version": "2.2.0",
+            "engine_update": "20250321",
+            "category": "malicious",
+            "result": "Engtest:Multi/Eicar"
+          },
+          "google_safebrowsing": {
+            "method": "blacklist",
+            "engine_name": "google_safebrowsing",
+            "engine_version": "1.0",
+            "engine_update": "20260304",
+            "category": "undetected",
+            "result": null
+          },
+          "Avast-Mobile": {
+            "method": "blacklist",
+            "engine_name": "Avast-Mobile",
+            "engine_version": "260304-00",
+            "engine_update": "20260304",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "SymantecMobileInsight": {
+            "method": "blacklist",
+            "engine_name": "SymantecMobileInsight",
+            "engine_version": "2.0",
+            "engine_update": "20260123",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "BitDefenderFalx": {
+            "method": "blacklist",
+            "engine_name": "BitDefenderFalx",
+            "engine_version": "2.0.936",
+            "engine_update": "20251216",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Elastic": {
+            "method": "blacklist",
+            "engine_name": "Elastic",
+            "engine_version": "4.0.251",
+            "engine_update": "20260226",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "DeepInstinct": {
+            "method": "blacklist",
+            "engine_name": "DeepInstinct",
+            "engine_version": "5.0.0.8",
+            "engine_update": "20260304",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "APEX": {
+            "method": "blacklist",
+            "engine_name": "APEX",
+            "engine_version": "6.755",
+            "engine_update": "20260304",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Paloalto": {
+            "method": "blacklist",
+            "engine_name": "Paloalto",
+            "engine_version": "0.9.0.1003",
+            "engine_update": "20260304",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Trapmine": {
+            "method": "blacklist",
+            "engine_name": "Trapmine",
+            "engine_version": "4.0.10.0",
+            "engine_update": "20260224",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Cylance": {
+            "method": "blacklist",
+            "engine_name": "Cylance",
+            "engine_version": "3.0.0.0",
+            "engine_update": "20260302",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "SentinelOne": {
+            "method": "blacklist",
+            "engine_name": "SentinelOne",
+            "engine_version": "7.5.3.1",
+            "engine_update": "20251224",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "tehtris": {
+            "method": "blacklist",
+            "engine_name": "tehtris",
+            "engine_version": "v0.1.4",
+            "engine_update": "20260304",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Trustlook": {
+            "method": "blacklist",
+            "engine_name": "Trustlook",
+            "engine_version": "1.0",
+            "engine_update": "20260304",
+            "category": "type-unsupported",
+            "result": null
+          }
+        },
+        "times_submitted": 4,
+        "tlsh": "T13FA022003F0ECE0BA20B80200033A0B00808020E2CF00A2820A03038CC3308C03EC238",
+        "magic": "ASCII text, with no line terminators",
+        "sha256": "7d694b6264f4c42d5f2ce3c5e70f0f10fc13566452c634a376aeb38228fd233a",
+        "names": [
+          "eicar.com"
+        ],
+        "meaningful_name": "eicar.com",
+        "type_description": "Powershell",
+        "last_analysis_date": 1772573836,
+        "available_tools": [
+          "sigcheck"
+        ],
+        "unique_sources": 3,
+        "downloadable": false,
+        "magika": "POWERSHELL",
+        "threat_severity": {
+          "version": 5,
+          "threat_severity_level": "SEVERITY_NONE",
+          "threat_severity_data": {
+            "num_av_detections": 4
+          },
+          "last_analysis_date": "1771862894",
+          "level_description": "Severity NONE because the file has no Google antivirus detections and no bad network activity"
+        },
+        "reputation": 0,
+        "last_modification_date": 1785306278
+      }
+    },
+    {
+      "id": "2af0e6c256b780cba0b16e4b1189c8d6b2e251753daeccc72fd71a05bfc23f7c",
+      "type": "file",
+      "links": {
+        "self": "https://www.virustotal.com/api/v3/files/2af0e6c256b780cba0b16e4b1189c8d6b2e251753daeccc72fd71a05bfc23f7c"
+      },
+      "attributes": {
+        "vhash": "827b5b8347ad6ae855fdd151354c12e85",
+        "type_tags": [
+          "document",
+          "msoffice",
+          "text",
+          "word",
+          "rtf"
+        ],
+        "sha1": "559cf5ed20d4e63cbc52b4199ba90bb1b8075e17",
+        "popular_threat_classification": {
+          "popular_threat_name": [
+            {
+              "count": 1,
+              "value": "eicar"
+            },
+            {
+              "count": 1,
+              "value": "eicartest"
+            },
+            {
+              "count": 1,
+              "value": "file"
+            }
+          ],
+          "suggested_threat_label": "trojan.eicar/eicartest",
+          "popular_threat_category": [
+            {
+              "count": 1,
+              "value": "trojan"
+            },
+            {
+              "count": 1,
+              "value": "virus"
+            }
+          ]
+        },
+        "trid": [
+          {
+            "file_type": "file seems to be plain text/ASCII",
+            "probability": 0.0
+          }
+        ],
+        "type_extension": "rtf",
+        "tags": [
+          "checks-cpu-name",
+          "calls-wmi",
+          "rtf"
+        ],
+        "filecondis": {
+          "dhash": "dada00da92488210",
+          "raw_md5": "c4c3a9bf4d05caa29dcb882ccfb821b2"
+        },
+        "last_analysis_stats": {
+          "malicious": 2,
+          "suspicious": 0,
+          "undetected": 60,
+          "harmless": 0,
+          "timeout": 0,
+          "confirmed-timeout": 0,
+          "failure": 0,
+          "type-unsupported": 13
+        },
+        "first_submission_date": 1785118281,
+        "total_votes": {
+          "harmless": 0,
+          "malicious": 0
+        },
+        "sigma_analysis_results": [
+          {
+            "rule_level": "medium",
+            "rule_id": "cfd44c3835317e846b18021a9060f4b9b011294ec53eb3ac1fad568abeb37922",
+            "rule_source": "Sigma Integrated Rule Set (GitHub)",
+            "rule_title": "Office Application Initiated Network Connection To Non-Local IP",
+            "rule_description": "Detects an office application (Word, Excel, PowerPoint)  that initiate a network connection to a non-private IP addresses.\nThis rule aims to detect traffic similar to one seen exploited in CVE-2021-42292.\nThis rule will require an initial baseline and tuning that is specific to your organization.\n",
+            "rule_author": "Christopher Peacock '@securepeacock', SCYTHE '@scythe_io', Florian Roth (Nextron Systems), Tim Shelton, Nasreddine Bencherchali (Nextron Systems)",
+            "match_context": [
+              {
+                "values": {
+                  "SourceIsIpv6": "false",
+                  "DestinationPort": "443",
+                  "DestinationIp": "150.171.109.183",
+                  "Protocol": "tcp",
+                  "SourceIp": "172.16.1.4",
+                  "DestinationIsIpv6": "false",
+                  "EventID": "3",
+                  "Image": "C:\\Program Files (x86)\\Microsoft Office\\Office16\\WINWORD.EXE",
+                  "SourcePort": "54328",
+                  "Initiated": "true"
+                }
+              },
+              {
+                "values": {
+                  "SourceIsIpv6": "false",
+                  "DestinationPort": "443",
+                  "Initiated": "true",
+                  "Protocol": "tcp",
+                  "SourceIp": "172.16.1.4",
+                  "DestinationIsIpv6": "false",
+                  "EventID": "3",
+                  "SourcePort": "54347",
+                  "Image": "C:\\Program Files (x86)\\Microsoft Office\\Office16\\WINWORD.EXE",
+                  "DestinationIp": "23.215.9.141"
+                }
+              },
+              {
+                "values": {
+                  "SourceIsIpv6": "false",
+                  "DestinationPort": "443",
+                  "DestinationIp": "23.215.15.144",
+                  "Protocol": "tcp",
+                  "SourceIp": "172.16.1.4",
+                  "DestinationIsIpv6": "false",
+                  "EventID": "3",
+                  "SourcePort": "54360",
+                  "Image": "C:\\Program Files (x86)\\Microsoft Office\\Office16\\WINWORD.EXE",
+                  "Initiated": "true"
+                }
+              },
+              {
+                "values": {
+                  "SourceIsIpv6": "false",
+                  "DestinationPort": "443",
+                  "DestinationIp": "23.215.15.144",
+                  "Protocol": "tcp",
+                  "SourceIp": "172.16.1.4",
+                  "DestinationIsIpv6": "false",
+                  "EventID": "3",
+                  "Image": "C:\\Program Files (x86)\\Microsoft Office\\Office16\\WINWORD.EXE",
+                  "SourcePort": "54362",
+                  "Initiated": "true"
+                }
+              },
+              {
+                "values": {
+                  "SourceIsIpv6": "false",
+                  "DestinationPort": "443",
+                  "DestinationIp": "23.215.15.144",
+                  "Protocol": "tcp",
+                  "SourceIp": "172.16.1.4",
+                  "DestinationIsIpv6": "false",
+                  "EventID": "3",
+                  "Image": "C:\\Program Files (x86)\\Microsoft Office\\Office16\\WINWORD.EXE",
+                  "SourcePort": "54361",
+                  "Initiated": "true"
+                }
+              }
+            ]
+          }
+        ],
+        "sandbox_verdicts": {
+          "C2AE": {
+            "category": "undetected",
+            "malware_classification": [
+              "UNKNOWN_VERDICT"
+            ],
+            "sandbox_name": "C2AE"
+          }
+        },
+        "size": 388,
+        "type_tag": "rtf",
+        "last_submission_date": 1785121221,
+        "exiftool": {
+          "MIMEType": "text/rtf",
+          "FileType": "RTF",
+          "FileTypeExtension": "rtf"
+        },
+        "ssdeep": "6:L4vXSVhxTr5dq6BSQlv3BhYrJDeSykim5WZ2D6PGl4+uPulJ1y9Y+skF:UmhVfj1jY+mWZ2Hl7nfkF",
+        "md5": "35777e373577187119dfc49b42965d6c",
+        "last_analysis_results": {
+          "Bkav": {
+            "method": "blacklist",
+            "engine_name": "Bkav",
+            "engine_version": "8.2.40(8338)",
+            "engine_update": "20260725",
+            "category": "undetected",
+            "result": null
+          },
+          "Lionic": {
+            "method": "blacklist",
+            "engine_name": "Lionic",
+            "engine_version": "8.16",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Cynet": {
+            "method": "blacklist",
+            "engine_name": "Cynet",
+            "engine_version": "4.0.3.4",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "CMC": {
+            "method": "blacklist",
+            "engine_name": "CMC",
+            "engine_version": "2.4.2022.1",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "CAT-QuickHeal": {
+            "method": "blacklist",
+            "engine_name": "CAT-QuickHeal",
+            "engine_version": "22.00",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Skyhigh": {
+            "method": "blacklist",
+            "engine_name": "Skyhigh",
+            "engine_version": "v2021.2.0+4045",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "ALYac": {
+            "method": "blacklist",
+            "engine_name": "ALYac",
+            "engine_version": "2.0.0.10",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Malwarebytes": {
+            "method": "blacklist",
+            "engine_name": "Malwarebytes",
+            "engine_version": "3.1.0.246",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "VIPRE": {
+            "method": "blacklist",
+            "engine_name": "VIPRE",
+            "engine_version": "6.0.0.35",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Sangfor": {
+            "method": "blacklist",
+            "engine_name": "Sangfor",
+            "engine_version": "2.22.3.0",
+            "engine_update": "20260724",
+            "category": "undetected",
+            "result": null
+          },
+          "K7AntiVirus": {
+            "method": "blacklist",
+            "engine_name": "K7AntiVirus",
+            "engine_version": "14.65.60259",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "K7GW": {
+            "method": "blacklist",
+            "engine_name": "K7GW",
+            "engine_version": "14.65.60258",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "CrowdStrike": {
+            "method": "blacklist",
+            "engine_name": "CrowdStrike",
+            "engine_version": "1.0",
+            "engine_update": "20230417",
+            "category": "undetected",
+            "result": null
+          },
+          "Arcabit": {
+            "method": "blacklist",
+            "engine_name": "Arcabit",
+            "engine_version": "2025.0.0.23",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "VirIT": {
+            "method": "blacklist",
+            "engine_name": "VirIT",
+            "engine_version": "9.5.1257",
+            "engine_update": "20260724",
+            "category": "undetected",
+            "result": null
+          },
+          "Symantec": {
+            "method": "blacklist",
+            "engine_name": "Symantec",
+            "engine_version": "1.22.0.0",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "ESET-NOD32": {
+            "method": "blacklist",
+            "engine_name": "ESET-NOD32",
+            "engine_version": "18.2.18.0",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "TrendMicro-HouseCall": {
+            "method": "blacklist",
+            "engine_name": "TrendMicro-HouseCall",
+            "engine_version": "24.550.0.1002",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Avast": {
+            "method": "blacklist",
+            "engine_name": "Avast",
+            "engine_version": "23.9.8494.0",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "ClamAV": {
+            "method": "blacklist",
+            "engine_name": "ClamAV",
+            "engine_version": "1.5.3.0",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Kaspersky": {
+            "method": "blacklist",
+            "engine_name": "Kaspersky",
+            "engine_version": "22.0.1.28",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "BitDefender": {
+            "method": "blacklist",
+            "engine_name": "BitDefender",
+            "engine_version": "7.2",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "NANO-Antivirus": {
+            "method": "blacklist",
+            "engine_name": "NANO-Antivirus",
+            "engine_version": "1.0.170.26895",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "SUPERAntiSpyware": {
+            "method": "blacklist",
+            "engine_name": "SUPERAntiSpyware",
+            "engine_version": "5.6.0.1032",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "MicroWorld-eScan": {
+            "method": "blacklist",
+            "engine_name": "MicroWorld-eScan",
+            "engine_version": "14.0.409.0",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Tencent": {
+            "method": "blacklist",
+            "engine_name": "Tencent",
+            "engine_version": "1.0.0.1",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Sophos": {
+            "method": "blacklist",
+            "engine_name": "Sophos",
+            "engine_version": "3.6.2.0",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "F-Secure": {
+            "method": "blacklist",
+            "engine_name": "F-Secure",
+            "engine_version": "18.10.1547.307",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "DrWeb": {
+            "method": "blacklist",
+            "engine_name": "DrWeb",
+            "engine_version": "7.0.75.2070",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Zillya": {
+            "method": "blacklist",
+            "engine_name": "Zillya",
+            "engine_version": "2.0.0.5653",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "TrendMicro": {
+            "method": "blacklist",
+            "engine_name": "TrendMicro",
+            "engine_version": "24.550.0.1002",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "McAfeeD": {
+            "method": "blacklist",
+            "engine_name": "McAfeeD",
+            "engine_version": "1.2.0.15534",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "SentinelOne": {
+            "method": "blacklist",
+            "engine_name": "SentinelOne",
+            "engine_version": "7.7.0.1",
+            "engine_update": "20260714",
+            "category": "undetected",
+            "result": null
+          },
+          "CTX": {
+            "method": "blacklist",
+            "engine_name": "CTX",
+            "engine_version": "2024.8.29.1",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Emsisoft": {
+            "method": "blacklist",
+            "engine_name": "Emsisoft",
+            "engine_version": "2024.8.0.61147",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Ikarus": {
+            "method": "blacklist",
+            "engine_name": "Ikarus",
+            "engine_version": "6.5.4.0",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Jiangmin": {
+            "method": "blacklist",
+            "engine_name": "Jiangmin",
+            "engine_version": "16.0.100",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Varist": {
+            "method": "blacklist",
+            "engine_name": "Varist",
+            "engine_version": "6.6.1.3",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Avira": {
+            "method": "blacklist",
+            "engine_name": "Avira",
+            "engine_version": "8.3.3.24",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Antiy-AVL": {
+            "method": "blacklist",
+            "engine_name": "Antiy-AVL",
+            "engine_version": "3.0",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Kingsoft": {
+            "method": "blacklist",
+            "engine_name": "Kingsoft",
+            "engine_version": "None",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Gridinsoft": {
+            "method": "blacklist",
+            "engine_name": "Gridinsoft",
+            "engine_version": "1.0.250.174",
+            "engine_update": "20260726",
+            "category": "malicious",
+            "result": "Trojan.EicarTest.vl!yf"
+          },
+          "Xcitium": {
+            "method": "blacklist",
+            "engine_name": "Xcitium",
+            "engine_version": "38838",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Microsoft": {
+            "method": "blacklist",
+            "engine_name": "Microsoft",
+            "engine_version": "1.1.26060.3008",
+            "engine_update": "20260727",
+            "category": "malicious",
+            "result": "Virus:DOS/EICAR_Test_File"
+          },
+          "ViRobot": {
+            "method": "blacklist",
+            "engine_name": "ViRobot",
+            "engine_version": "2014.3.20.0",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "ZoneAlarm": {
+            "method": "blacklist",
+            "engine_name": "ZoneAlarm",
+            "engine_version": "6.26-117392487",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "GData": {
+            "method": "blacklist",
+            "engine_name": "GData",
+            "engine_version": "GD:27.45412AVA:64.31651",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Google": {
+            "method": "blacklist",
+            "engine_name": "Google",
+            "engine_version": "1785114094",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "AhnLab-V3": {
+            "method": "blacklist",
+            "engine_name": "AhnLab-V3",
+            "engine_version": "3.30.1.10706",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Acronis": {
+            "method": "blacklist",
+            "engine_name": "Acronis",
+            "engine_version": "1.2.0.121",
+            "engine_update": "20240328",
+            "category": "undetected",
+            "result": null
+          },
+          "VBA32": {
+            "method": "blacklist",
+            "engine_name": "VBA32",
+            "engine_version": "5.6.1",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "TACHYON": {
+            "method": "blacklist",
+            "engine_name": "TACHYON",
+            "engine_version": "2026-07-27.01",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Zoner": {
+            "method": "blacklist",
+            "engine_name": "Zoner",
+            "engine_version": "2.2.2.0",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Rising": {
+            "method": "blacklist",
+            "engine_name": "Rising",
+            "engine_version": "25.0.0.28",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Yandex": {
+            "method": "blacklist",
+            "engine_name": "Yandex",
+            "engine_version": "5.5.2.24",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "TrellixENS": {
+            "method": "blacklist",
+            "engine_name": "TrellixENS",
+            "engine_version": "6.0.6.653",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "huorong": {
+            "method": "blacklist",
+            "engine_name": "huorong",
+            "engine_version": "2855408:2855408:bab3c71:bab3c71",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "MaxSecure": {
+            "method": "blacklist",
+            "engine_name": "MaxSecure",
+            "engine_version": "1.0.0.1",
+            "engine_update": "20260724",
+            "category": "undetected",
+            "result": null
+          },
+          "Fortinet": {
+            "method": "blacklist",
+            "engine_name": "Fortinet",
+            "engine_version": "7.0.48.0",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "AVG": {
+            "method": "blacklist",
+            "engine_name": "AVG",
+            "engine_version": "23.9.8494.0",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "Panda": {
+            "method": "blacklist",
+            "engine_name": "Panda",
+            "engine_version": "4.6.4.2",
+            "engine_update": "20260726",
+            "category": "undetected",
+            "result": null
+          },
+          "google_safebrowsing": {
+            "method": "blacklist",
+            "engine_name": "google_safebrowsing",
+            "engine_version": "1.0",
+            "engine_update": "20260727",
+            "category": "undetected",
+            "result": null
+          },
+          "Avast-Mobile": {
+            "method": "blacklist",
+            "engine_name": "Avast-Mobile",
+            "engine_version": "260725-02",
+            "engine_update": "20260725",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "SymantecMobileInsight": {
+            "method": "blacklist",
+            "engine_name": "SymantecMobileInsight",
+            "engine_version": "2.0",
+            "engine_update": "20260123",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "BitDefenderFalx": {
+            "method": "blacklist",
+            "engine_name": "BitDefenderFalx",
+            "engine_version": "2.0.936",
+            "engine_update": "20260525",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "tehtris": {
+            "method": "blacklist",
+            "engine_name": "tehtris",
+            "engine_version": null,
+            "engine_update": "20260727",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Elastic": {
+            "method": "blacklist",
+            "engine_name": "Elastic",
+            "engine_version": "4.0.275",
+            "engine_update": "20260722",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "APEX": {
+            "method": "blacklist",
+            "engine_name": "APEX",
+            "engine_version": "6.802",
+            "engine_update": "20260725",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Paloalto": {
+            "method": "blacklist",
+            "engine_name": "Paloalto",
+            "engine_version": "0.9.0.1003",
+            "engine_update": "20260727",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Trapmine": {
+            "method": "blacklist",
+            "engine_name": "Trapmine",
+            "engine_version": "4.0.14.0",
+            "engine_update": "20260708",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Alibaba": {
+            "method": "blacklist",
+            "engine_name": "Alibaba",
+            "engine_version": "0.3.0.5",
+            "engine_update": "20190527",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Webroot": {
+            "method": "blacklist",
+            "engine_name": "Webroot",
+            "engine_version": "1.9.0.8",
+            "engine_update": "20250227",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Cylance": {
+            "method": "blacklist",
+            "engine_name": "Cylance",
+            "engine_version": "3.0.0.0",
+            "engine_update": "20260723",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Trustlook": {
+            "method": "blacklist",
+            "engine_name": "Trustlook",
+            "engine_version": "1.0",
+            "engine_update": "20260727",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "alibabacloud": {
+            "method": "blacklist",
+            "engine_name": "alibabacloud",
+            "engine_version": "2.2.0",
+            "engine_update": "20250321",
+            "category": "type-unsupported",
+            "result": null
+          }
+        },
+        "times_submitted": 2,
+        "tlsh": "T13EE0613CE554DA7147DBD02D65B6D5391558A150B4C2A6D9F0701120F93245D13BCD15",
+        "magic": "Rich Text Format data, version 1, ANSI, code page 1252",
+        "sha256": "2af0e6c256b780cba0b16e4b1189c8d6b2e251753daeccc72fd71a05bfc23f7c",
+        "sigma_analysis_stats": {
+          "critical": 0,
+          "high": 0,
+          "medium": 1,
+          "low": 0
+        },
+        "names": [
+          "eicar.com.txt",
+          "eicar.txt"
+        ],
+        "meaningful_name": "eicar.com.txt",
+        "type_description": "Rich Text Format",
+        "last_analysis_date": 1785121284,
+        "rtf_info": {
+          "document_properties": {
+            "non_ascii_characters": 0,
+            "embedded_drawings": 0,
+            "rtf_header": "rtf1",
+            "default_ansi_codepage": "Western European",
+            "read_only_protection": false,
+            "user_protection": false,
+            "default_character_set": "ANSI",
+            "custom_xml_data_properties": 0,
+            "dos_stubs": 0,
+            "embedded_pictures": 0,
+            "longest_hex_string": 5
+          }
+        },
+        "available_tools": [
+          "sigcheck"
+        ],
+        "unique_sources": 1,
+        "downloadable": false,
+        "magika": "RTF",
+        "threat_severity": {
+          "version": 5,
+          "threat_severity_level": "SEVERITY_NONE",
+          "threat_severity_data": {
+            "num_av_detections": 2
+          },
+          "last_analysis_date": "1785118296",
+          "level_description": "Severity NONE because the file has no Google antivirus detections and no bad network activity"
+        },
+        "main_icon": {
+          "raw_md5": "21de7437387a3f32d0637bd435a3cf85",
+          "dhash": "0901000000000000"
+        },
+        "sigma_analysis_summary": {
+          "Sigma Integrated Rule Set (GitHub)": {
+            "critical": 0,
+            "high": 0,
+            "medium": 1,
+            "low": 0
+          }
+        },
+        "reputation": 0,
+        "last_modification_date": 1785241558
+      }
+    },
+    {
+      "id": "eb51735721bd6770b26b189576f2539be3fff28f5837ba5c8102487b41dc85c0",
+      "type": "file",
+      "links": {
+        "self": "https://www.virustotal.com/api/v3/files/eb51735721bd6770b26b189576f2539be3fff28f5837ba5c8102487b41dc85c0"
+      },
+      "attributes": {
+        "type_tags": [
+          "text"
+        ],
+        "sha1": "101ab136d6f33db13a9d8aaed3f0c38206390097",
+        "popular_threat_classification": {
+          "popular_threat_name": [
+            {
+              "count": 4,
+              "value": "eicar"
+            },
+            {
+              "count": 3,
+              "value": "test"
+            },
+            {
+              "count": 1,
+              "value": "file"
+            }
+          ],
+          "suggested_threat_label": "virus.eicar/test",
+          "popular_threat_category": [
+            {
+              "count": 1,
+              "value": "virus"
+            }
+          ]
+        },
+        "type_extension": "txt",
+        "tags": [
+          "text"
+        ],
+        "filecondis": {
+          "dhash": "9300009100008090",
+          "raw_md5": "72ff9399988aed2fde4b936ca662ae9f"
+        },
+        "last_analysis_stats": {
+          "malicious": 4,
+          "suspicious": 0,
+          "undetected": 55,
+          "harmless": 0,
+          "timeout": 0,
+          "confirmed-timeout": 0,
+          "failure": 3,
+          "type-unsupported": 13
+        },
+        "first_submission_date": 1784728198,
+        "total_votes": {
+          "harmless": 0,
+          "malicious": 0
+        },
+        "size": 68,
+        "type_tag": "text",
+        "last_submission_date": 1784728198,
+        "exiftool": {
+          "MIMEType": "text/plain",
+          "FileType": "TXT",
+          "WordCount": "1",
+          "LineCount": "1",
+          "MIMEEncoding": "us-ascii",
+          "FileTypeExtension": "txt",
+          "Newlines": "(none)"
+        },
+        "ssdeep": "3:wG7RNvsgzsVqSwHq9:wG7ROgzsko",
+        "md5": "4813e8728d92c2076b7b8b6ae04b58cb",
+        "last_analysis_results": {
+          "Bkav": {
+            "method": "blacklist",
+            "engine_name": "Bkav",
+            "engine_version": "8.2.40(8338)",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Lionic": {
+            "method": "blacklist",
+            "engine_name": "Lionic",
+            "engine_version": "8.16",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "MicroWorld-eScan": {
+            "method": "blacklist",
+            "engine_name": "MicroWorld-eScan",
+            "engine_version": "14.0.409.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "ClamAV": {
+            "method": "blacklist",
+            "engine_name": "ClamAV",
+            "engine_version": "1.5.3.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "CMC": {
+            "method": "blacklist",
+            "engine_name": "CMC",
+            "engine_version": "2.4.2022.1",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "CAT-QuickHeal": {
+            "method": "blacklist",
+            "engine_name": "CAT-QuickHeal",
+            "engine_version": "22.00",
+            "engine_update": "20260721",
+            "category": "undetected",
+            "result": null
+          },
+          "Skyhigh": {
+            "method": "blacklist",
+            "engine_name": "Skyhigh",
+            "engine_version": "v2021.2.0+4045",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "ALYac": {
+            "method": "blacklist",
+            "engine_name": "ALYac",
+            "engine_version": "2.0.0.10",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Malwarebytes": {
+            "method": "blacklist",
+            "engine_name": "Malwarebytes",
+            "engine_version": "3.1.0.246",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Sangfor": {
+            "method": "blacklist",
+            "engine_name": "Sangfor",
+            "engine_version": "2.22.3.0",
+            "engine_update": "20260720",
+            "category": "undetected",
+            "result": null
+          },
+          "K7AntiVirus": {
+            "method": "blacklist",
+            "engine_name": "K7AntiVirus",
+            "engine_version": "14.65.60214",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "K7GW": {
+            "method": "blacklist",
+            "engine_name": "K7GW",
+            "engine_version": "14.65.60216",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "CrowdStrike": {
+            "method": "blacklist",
+            "engine_name": "CrowdStrike",
+            "engine_version": "1.0",
+            "engine_update": "20230417",
+            "category": "undetected",
+            "result": null
+          },
+          "Arcabit": {
+            "method": "blacklist",
+            "engine_name": "Arcabit",
+            "engine_version": "2025.0.0.23",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "VirIT": {
+            "method": "blacklist",
+            "engine_name": "VirIT",
+            "engine_version": "9.5.1255",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Symantec": {
+            "method": "blacklist",
+            "engine_name": "Symantec",
+            "engine_version": "1.22.0.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "ESET-NOD32": {
+            "method": "blacklist",
+            "engine_name": "ESET-NOD32",
+            "engine_version": "18.2.18.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "TrendMicro-HouseCall": {
+            "method": "blacklist",
+            "engine_name": "TrendMicro-HouseCall",
+            "engine_version": "24.550.0.1002",
+            "engine_update": "20260722",
+            "category": "malicious",
+            "result": "Eicar_test_1"
+          },
+          "Avast": {
+            "method": "blacklist",
+            "engine_name": "Avast",
+            "engine_version": "23.9.8494.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Cynet": {
+            "method": "blacklist",
+            "engine_name": "Cynet",
+            "engine_version": "4.0.3.4",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Kaspersky": {
+            "method": "blacklist",
+            "engine_name": "Kaspersky",
+            "engine_version": "22.0.1.28",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "BitDefender": {
+            "method": "blacklist",
+            "engine_name": "BitDefender",
+            "engine_version": "7.2",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "NANO-Antivirus": {
+            "method": "blacklist",
+            "engine_name": "NANO-Antivirus",
+            "engine_version": "1.0.170.26895",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "ViRobot": {
+            "method": "blacklist",
+            "engine_name": "ViRobot",
+            "engine_version": "2014.3.20.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Tencent": {
+            "method": "blacklist",
+            "engine_name": "Tencent",
+            "engine_version": "1.0.0.1",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Sophos": {
+            "method": "blacklist",
+            "engine_name": "Sophos",
+            "engine_version": "3.6.2.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "F-Secure": {
+            "method": "blacklist",
+            "engine_name": "F-Secure",
+            "engine_version": "18.10.1547.307",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "DrWeb": {
+            "method": "blacklist",
+            "engine_name": "DrWeb",
+            "engine_version": "7.0.75.2070",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "VIPRE": {
+            "method": "blacklist",
+            "engine_name": "VIPRE",
+            "engine_version": "6.0.0.35",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "TrendMicro": {
+            "method": "blacklist",
+            "engine_name": "TrendMicro",
+            "engine_version": "24.550.0.1002",
+            "engine_update": "20260722",
+            "category": "malicious",
+            "result": "Eicar_test_1"
+          },
+          "McAfeeD": {
+            "method": "blacklist",
+            "engine_name": "McAfeeD",
+            "engine_version": "1.2.0.15146",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "CTX": {
+            "method": "blacklist",
+            "engine_name": "CTX",
+            "engine_version": "2024.8.29.1",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Emsisoft": {
+            "method": "blacklist",
+            "engine_name": "Emsisoft",
+            "engine_version": "2024.8.0.61147",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Jiangmin": {
+            "method": "blacklist",
+            "engine_name": "Jiangmin",
+            "engine_version": "16.0.100",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Avira": {
+            "method": "blacklist",
+            "engine_name": "Avira",
+            "engine_version": "8.3.3.24",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Antiy-AVL": {
+            "method": "blacklist",
+            "engine_name": "Antiy-AVL",
+            "engine_version": "3.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Kingsoft": {
+            "method": "blacklist",
+            "engine_name": "Kingsoft",
+            "engine_version": "None",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Gridinsoft": {
+            "method": "blacklist",
+            "engine_name": "Gridinsoft",
+            "engine_version": "1.0.250.174",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Xcitium": {
+            "method": "blacklist",
+            "engine_name": "Xcitium",
+            "engine_version": "38825",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Microsoft": {
+            "method": "blacklist",
+            "engine_name": "Microsoft",
+            "engine_version": "1.1.26060.3008",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "SUPERAntiSpyware": {
+            "method": "blacklist",
+            "engine_name": "SUPERAntiSpyware",
+            "engine_version": "5.6.0.1032",
+            "engine_update": "20260717",
+            "category": "malicious",
+            "result": "NotAThreat.EICAR[TestFile]"
+          },
+          "ZoneAlarm": {
+            "method": "blacklist",
+            "engine_name": "ZoneAlarm",
+            "engine_version": "6.26-117392356",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "GData": {
+            "method": "blacklist",
+            "engine_name": "GData",
+            "engine_version": "GD:27.45357AVA:64.31626",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Varist": {
+            "method": "blacklist",
+            "engine_name": "Varist",
+            "engine_version": "6.6.1.3",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "AhnLab-V3": {
+            "method": "blacklist",
+            "engine_name": "AhnLab-V3",
+            "engine_version": "3.30.1.10706",
+            "engine_update": "20260722",
+            "category": "malicious",
+            "result": "Virus/EICAR_Test_File"
+          },
+          "Acronis": {
+            "method": "blacklist",
+            "engine_name": "Acronis",
+            "engine_version": "1.2.0.121",
+            "engine_update": "20240328",
+            "category": "undetected",
+            "result": null
+          },
+          "VBA32": {
+            "method": "blacklist",
+            "engine_name": "VBA32",
+            "engine_version": "5.6.1",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "TACHYON": {
+            "method": "blacklist",
+            "engine_name": "TACHYON",
+            "engine_version": "2026-07-22.02",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Zoner": {
+            "method": "blacklist",
+            "engine_name": "Zoner",
+            "engine_version": "2.2.2.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Rising": {
+            "method": "blacklist",
+            "engine_name": "Rising",
+            "engine_version": "25.0.0.28",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Yandex": {
+            "method": "blacklist",
+            "engine_name": "Yandex",
+            "engine_version": "5.5.2.24",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "TrellixENS": {
+            "method": "blacklist",
+            "engine_name": "TrellixENS",
+            "engine_version": "6.0.6.653",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "huorong": {
+            "method": "blacklist",
+            "engine_name": "huorong",
+            "engine_version": "543c414:543c414:fda793a:fda793a",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "MaxSecure": {
+            "method": "blacklist",
+            "engine_name": "MaxSecure",
+            "engine_version": "1.0.0.1",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Fortinet": {
+            "method": "blacklist",
+            "engine_name": "Fortinet",
+            "engine_version": "7.0.48.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "AVG": {
+            "method": "blacklist",
+            "engine_name": "AVG",
+            "engine_version": "23.9.8494.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Panda": {
+            "method": "blacklist",
+            "engine_name": "Panda",
+            "engine_version": "4.6.4.2",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "alibabacloud": {
+            "method": "blacklist",
+            "engine_name": "alibabacloud",
+            "engine_version": "2.2.0",
+            "engine_update": "20250321",
+            "category": "undetected",
+            "result": null
+          },
+          "google_safebrowsing": {
+            "method": "blacklist",
+            "engine_name": "google_safebrowsing",
+            "engine_version": "1.0",
+            "engine_update": "20260722",
+            "category": "undetected",
+            "result": null
+          },
+          "Zillya": {
+            "method": "blacklist",
+            "engine_name": "Zillya",
+            "engine_version": "2.0.0.5646",
+            "engine_update": "20260721",
+            "category": "failure",
+            "result": null
+          },
+          "Ikarus": {
+            "method": "blacklist",
+            "engine_name": "Ikarus",
+            "engine_version": "6.5.4.0",
+            "engine_update": "20260722",
+            "category": "failure",
+            "result": null
+          },
+          "Google": {
+            "method": "blacklist",
+            "engine_name": "Google",
+            "engine_version": null,
+            "engine_update": "20260722",
+            "category": "failure",
+            "result": null
+          },
+          "Avast-Mobile": {
+            "method": "blacklist",
+            "engine_name": "Avast-Mobile",
+            "engine_version": "260722-00",
+            "engine_update": "20260722",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "SymantecMobileInsight": {
+            "method": "blacklist",
+            "engine_name": "SymantecMobileInsight",
+            "engine_version": "2.0",
+            "engine_update": "20260123",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "BitDefenderFalx": {
+            "method": "blacklist",
+            "engine_name": "BitDefenderFalx",
+            "engine_version": "2.0.936",
+            "engine_update": "20260525",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "tehtris": {
+            "method": "blacklist",
+            "engine_name": "tehtris",
+            "engine_version": null,
+            "engine_update": "20260722",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Elastic": {
+            "method": "blacklist",
+            "engine_name": "Elastic",
+            "engine_version": "4.0.275",
+            "engine_update": "20260722",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Webroot": {
+            "method": "blacklist",
+            "engine_name": "Webroot",
+            "engine_version": "1.9.0.8",
+            "engine_update": "20250227",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "APEX": {
+            "method": "blacklist",
+            "engine_name": "APEX",
+            "engine_version": "6.801",
+            "engine_update": "20260722",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Paloalto": {
+            "method": "blacklist",
+            "engine_name": "Paloalto",
+            "engine_version": "0.9.0.1003",
+            "engine_update": "20260722",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Alibaba": {
+            "method": "blacklist",
+            "engine_name": "Alibaba",
+            "engine_version": "0.3.0.5",
+            "engine_update": "20190527",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Trapmine": {
+            "method": "blacklist",
+            "engine_name": "Trapmine",
+            "engine_version": "4.0.14.0",
+            "engine_update": "20260708",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Cylance": {
+            "method": "blacklist",
+            "engine_name": "Cylance",
+            "engine_version": "3.0.0.0",
+            "engine_update": "20260709",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "SentinelOne": {
+            "method": "blacklist",
+            "engine_name": "SentinelOne",
+            "engine_version": "7.7.0.1",
+            "engine_update": "20260714",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Trustlook": {
+            "method": "blacklist",
+            "engine_name": "Trustlook",
+            "engine_version": "1.0",
+            "engine_update": "20260722",
+            "category": "type-unsupported",
+            "result": null
+          }
+        },
+        "times_submitted": 1,
+        "tlsh": "T1AEA00214375DEE6AA65B54251972E4B61818055E1CE10E7861A520BCD87729903DC1BD",
+        "magic": "ASCII text, with no line terminators",
+        "sha256": "eb51735721bd6770b26b189576f2539be3fff28f5837ba5c8102487b41dc85c0",
+        "names": [
+          "eicar.com"
+        ],
+        "meaningful_name": "eicar.com",
+        "type_description": "Text",
+        "last_analysis_date": 1784728198,
+        "available_tools": [
+          "sigcheck"
+        ],
+        "unique_sources": 1,
+        "downloadable": false,
+        "threat_severity": {
+          "version": 5,
+          "threat_severity_level": "SEVERITY_NONE",
+          "threat_severity_data": {
+            "num_av_detections": 4
+          },
+          "last_analysis_date": "1784728278",
+          "level_description": "Severity NONE because the file has no Google antivirus detections and no bad network activity"
+        },
+        "reputation": 0,
+        "last_modification_date": 1784735478
+      }
+    },
+    {
+      "id": "ab6049651ad16e313a7f7ec4bb6714e8fcbe2e84fb6b3cba3bef194de3b1baff",
+      "type": "file",
+      "links": {
+        "self": "https://www.virustotal.com/api/v3/files/ab6049651ad16e313a7f7ec4bb6714e8fcbe2e84fb6b3cba3bef194de3b1baff"
+      },
+      "attributes": {
+        "html_info": {
+          "title": "Web Page Blocked",
+          "html_meta": {
+            "viewport": [
+              "initial-scale=1.0"
+            ]
+          }
+        },
+        "vhash": "8da5a805094bdc85266ba5bb667d6d31",
+        "type_tags": [
+          "internet",
+          "html"
+        ],
+        "sha1": "a29dc3f2fe1e9073734f6eeada731c5015657707",
+        "trid": [
+          {
+            "file_type": "HyperText Markup Language (UTF-8)",
+            "probability": 66.6
+          },
+          {
+            "file_type": "Text - UTF-8 encoded",
+            "probability": 33.3
+          }
+        ],
+        "type_extension": "html",
+        "tags": [
+          "html"
+        ],
+        "filecondis": {
+          "dhash": "fcf8f09c94900020",
+          "raw_md5": "0dc9d8dba3cc873bf8263b4fe4e04b48"
+        },
+        "last_analysis_stats": {
+          "malicious": 0,
+          "suspicious": 0,
+          "undetected": 61,
+          "harmless": 0,
+          "timeout": 0,
+          "confirmed-timeout": 0,
+          "failure": 1,
+          "type-unsupported": 13
+        },
+        "first_submission_date": 1783321159,
+        "total_votes": {
+          "harmless": 0,
+          "malicious": 0
+        },
+        "sandbox_verdicts": {
+          "Zenbox": {
+            "category": "harmless",
+            "malware_classification": [
+              "CLEAN"
+            ],
+            "sandbox_name": "Zenbox",
+            "confidence": 100
+          }
+        },
+        "size": 1554,
+        "type_tag": "html",
+        "last_submission_date": 1784622303,
+        "exiftool": {
+          "MIMEType": "text/html",
+          "FileType": "HTML",
+          "FileTypeExtension": "html",
+          "ContentType": "text/html; charset=utf-8",
+          "Pragma": "NO-CACHE",
+          "Viewport": "initial-scale=1.0",
+          "Title": "Web Page Blocked"
+        },
+        "ssdeep": "24:9sprHuayN72LW2thXEhDLGdqReb/OhyVNMdMxJfSJXBNRQs5:WprHHzX6DygRS/OhyEdY8F75",
+        "md5": "ebce22e38ba256c675310670a2860eee",
+        "last_analysis_results": {
+          "Bkav": {
+            "method": "blacklist",
+            "engine_name": "Bkav",
+            "engine_version": "8.2.40(8338)",
+            "engine_update": "20260704",
+            "category": "undetected",
+            "result": null
+          },
+          "Lionic": {
+            "method": "blacklist",
+            "engine_name": "Lionic",
+            "engine_version": "8.16",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "MicroWorld-eScan": {
+            "method": "blacklist",
+            "engine_name": "MicroWorld-eScan",
+            "engine_version": "14.0.409.0",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "ClamAV": {
+            "method": "blacklist",
+            "engine_name": "ClamAV",
+            "engine_version": "1.5.3.0",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "CMC": {
+            "method": "blacklist",
+            "engine_name": "CMC",
+            "engine_version": "2.4.2022.1",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "CAT-QuickHeal": {
+            "method": "blacklist",
+            "engine_name": "CAT-QuickHeal",
+            "engine_version": "22.00",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "Skyhigh": {
+            "method": "blacklist",
+            "engine_name": "Skyhigh",
+            "engine_version": "v2021.2.0+4045",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "ALYac": {
+            "method": "blacklist",
+            "engine_name": "ALYac",
+            "engine_version": "2.0.0.10",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "Malwarebytes": {
+            "method": "blacklist",
+            "engine_name": "Malwarebytes",
+            "engine_version": "3.1.0.239",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "VIPRE": {
+            "method": "blacklist",
+            "engine_name": "VIPRE",
+            "engine_version": "6.0.0.35",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "Sangfor": {
+            "method": "blacklist",
+            "engine_name": "Sangfor",
+            "engine_version": "2.22.3.0",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "CrowdStrike": {
+            "method": "blacklist",
+            "engine_name": "CrowdStrike",
+            "engine_version": "1.0",
+            "engine_update": "20251219",
+            "category": "undetected",
+            "result": null
+          },
+          "K7GW": {
+            "method": "blacklist",
+            "engine_name": "K7GW",
+            "engine_version": "14.60.60044",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "K7AntiVirus": {
+            "method": "blacklist",
+            "engine_name": "K7AntiVirus",
+            "engine_version": "14.60.60043",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Arcabit": {
+            "method": "blacklist",
+            "engine_name": "Arcabit",
+            "engine_version": "2025.0.0.23",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "VirIT": {
+            "method": "blacklist",
+            "engine_name": "VirIT",
+            "engine_version": "9.5.1242",
+            "engine_update": "20260703",
+            "category": "undetected",
+            "result": null
+          },
+          "Symantec": {
+            "method": "blacklist",
+            "engine_name": "Symantec",
+            "engine_version": "1.22.0.0",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "ESET-NOD32": {
+            "method": "blacklist",
+            "engine_name": "ESET-NOD32",
+            "engine_version": "18.2.18.0",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "TrendMicro-HouseCall": {
+            "method": "blacklist",
+            "engine_name": "TrendMicro-HouseCall",
+            "engine_version": "24.550.0.1002",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Avast": {
+            "method": "blacklist",
+            "engine_name": "Avast",
+            "engine_version": "23.9.8494.0",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Cynet": {
+            "method": "blacklist",
+            "engine_name": "Cynet",
+            "engine_version": "4.0.3.4",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Kaspersky": {
+            "method": "blacklist",
+            "engine_name": "Kaspersky",
+            "engine_version": "22.0.1.28",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "BitDefender": {
+            "method": "blacklist",
+            "engine_name": "BitDefender",
+            "engine_version": "7.2",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "NANO-Antivirus": {
+            "method": "blacklist",
+            "engine_name": "NANO-Antivirus",
+            "engine_version": "1.0.170.26895",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "SUPERAntiSpyware": {
+            "method": "blacklist",
+            "engine_name": "SUPERAntiSpyware",
+            "engine_version": "5.6.0.1032",
+            "engine_update": "20260703",
+            "category": "undetected",
+            "result": null
+          },
+          "Rising": {
+            "method": "blacklist",
+            "engine_name": "Rising",
+            "engine_version": "25.0.0.28",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Sophos": {
+            "method": "blacklist",
+            "engine_name": "Sophos",
+            "engine_version": "3.6.2.0",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "F-Secure": {
+            "method": "blacklist",
+            "engine_name": "F-Secure",
+            "engine_version": "18.10.1547.307",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "DrWeb": {
+            "method": "blacklist",
+            "engine_name": "DrWeb",
+            "engine_version": "7.0.75.2070",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Zillya": {
+            "method": "blacklist",
+            "engine_name": "Zillya",
+            "engine_version": "2.0.0.5635",
+            "engine_update": "20260703",
+            "category": "undetected",
+            "result": null
+          },
+          "TrendMicro": {
+            "method": "blacklist",
+            "engine_name": "TrendMicro",
+            "engine_version": "24.550.0.1002",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "McAfeeD": {
+            "method": "blacklist",
+            "engine_name": "McAfeeD",
+            "engine_version": "1.2.0.15146",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "CTX": {
+            "method": "blacklist",
+            "engine_name": "CTX",
+            "engine_version": "2024.8.29.1",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Emsisoft": {
+            "method": "blacklist",
+            "engine_name": "Emsisoft",
+            "engine_version": "2024.8.0.61147",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Jiangmin": {
+            "method": "blacklist",
+            "engine_name": "Jiangmin",
+            "engine_version": "16.0.100",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Varist": {
+            "method": "blacklist",
+            "engine_name": "Varist",
+            "engine_version": "6.6.1.3",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Avira": {
+            "method": "blacklist",
+            "engine_name": "Avira",
+            "engine_version": "8.3.3.24",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Antiy-AVL": {
+            "method": "blacklist",
+            "engine_name": "Antiy-AVL",
+            "engine_version": "3.0",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Kingsoft": {
+            "method": "blacklist",
+            "engine_name": "Kingsoft",
+            "engine_version": "None",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "Gridinsoft": {
+            "method": "blacklist",
+            "engine_name": "Gridinsoft",
+            "engine_version": "1.0.249.174",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Xcitium": {
+            "method": "blacklist",
+            "engine_name": "Xcitium",
+            "engine_version": "38783",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "Microsoft": {
+            "method": "blacklist",
+            "engine_name": "Microsoft",
+            "engine_version": "1.1.26050.11",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "ViRobot": {
+            "method": "blacklist",
+            "engine_name": "ViRobot",
+            "engine_version": "2014.3.20.0",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "ZoneAlarm": {
+            "method": "blacklist",
+            "engine_name": "ZoneAlarm",
+            "engine_version": "6.25-116108043",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "GData": {
+            "method": "blacklist",
+            "engine_name": "GData",
+            "engine_version": "GD:27.45162AVA:64.31537",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Google": {
+            "method": "blacklist",
+            "engine_name": "Google",
+            "engine_version": "1783314038",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "AhnLab-V3": {
+            "method": "blacklist",
+            "engine_name": "AhnLab-V3",
+            "engine_version": "3.30.1.10706",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Acronis": {
+            "method": "blacklist",
+            "engine_name": "Acronis",
+            "engine_version": "1.2.0.121",
+            "engine_update": "20240328",
+            "category": "undetected",
+            "result": null
+          },
+          "VBA32": {
+            "method": "blacklist",
+            "engine_name": "VBA32",
+            "engine_version": "5.6.1",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "TACHYON": {
+            "method": "blacklist",
+            "engine_name": "TACHYON",
+            "engine_version": "2026-07-06.02",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Zoner": {
+            "method": "blacklist",
+            "engine_name": "Zoner",
+            "engine_version": "2.2.2.0",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Tencent": {
+            "method": "blacklist",
+            "engine_name": "Tencent",
+            "engine_version": "1.0.0.1",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Yandex": {
+            "method": "blacklist",
+            "engine_name": "Yandex",
+            "engine_version": "5.5.2.24",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "TrellixENS": {
+            "method": "blacklist",
+            "engine_name": "TrellixENS",
+            "engine_version": "6.0.6.653",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "huorong": {
+            "method": "blacklist",
+            "engine_name": "huorong",
+            "engine_version": "85b71b9:85b71b9:4710151:4710151",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "MaxSecure": {
+            "method": "blacklist",
+            "engine_name": "MaxSecure",
+            "engine_version": "1.0.0.1",
+            "engine_update": "20260703",
+            "category": "undetected",
+            "result": null
+          },
+          "Fortinet": {
+            "method": "blacklist",
+            "engine_name": "Fortinet",
+            "engine_version": "7.0.48.0",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "AVG": {
+            "method": "blacklist",
+            "engine_name": "AVG",
+            "engine_version": "23.9.8494.0",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Panda": {
+            "method": "blacklist",
+            "engine_name": "Panda",
+            "engine_version": "4.6.4.2",
+            "engine_update": "20260705",
+            "category": "undetected",
+            "result": null
+          },
+          "alibabacloud": {
+            "method": "blacklist",
+            "engine_name": "alibabacloud",
+            "engine_version": "2.2.0",
+            "engine_update": "20250321",
+            "category": "undetected",
+            "result": null
+          },
+          "google_safebrowsing": {
+            "method": "blacklist",
+            "engine_name": "google_safebrowsing",
+            "engine_version": "1.0",
+            "engine_update": "20260706",
+            "category": "undetected",
+            "result": null
+          },
+          "Ikarus": {
+            "method": "blacklist",
+            "engine_name": "Ikarus",
+            "engine_version": "6.5.4.0",
+            "engine_update": "20260705",
+            "category": "failure",
+            "result": null
+          },
+          "Avast-Mobile": {
+            "method": "blacklist",
+            "engine_name": "Avast-Mobile",
+            "engine_version": "260705-04",
+            "engine_update": "20260705",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "SymantecMobileInsight": {
+            "method": "blacklist",
+            "engine_name": "SymantecMobileInsight",
+            "engine_version": "2.0",
+            "engine_update": "20260123",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "BitDefenderFalx": {
+            "method": "blacklist",
+            "engine_name": "BitDefenderFalx",
+            "engine_version": "2.0.936",
+            "engine_update": "20260525",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "tehtris": {
+            "method": "blacklist",
+            "engine_name": "tehtris",
+            "engine_version": "v0.1.4",
+            "engine_update": "20260706",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Elastic": {
+            "method": "blacklist",
+            "engine_name": "Elastic",
+            "engine_version": "4.0.270",
+            "engine_update": "20260630",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "APEX": {
+            "method": "blacklist",
+            "engine_name": "APEX",
+            "engine_version": "6.795",
+            "engine_update": "20260704",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Paloalto": {
+            "method": "blacklist",
+            "engine_name": "Paloalto",
+            "engine_version": "0.9.0.1003",
+            "engine_update": "20260706",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Trapmine": {
+            "method": "blacklist",
+            "engine_name": "Trapmine",
+            "engine_version": "4.0.12.0",
+            "engine_update": "20260604",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Alibaba": {
+            "method": "blacklist",
+            "engine_name": "Alibaba",
+            "engine_version": "0.3.0.5",
+            "engine_update": "20190527",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Webroot": {
+            "method": "blacklist",
+            "engine_name": "Webroot",
+            "engine_version": "1.9.0.8",
+            "engine_update": "20250227",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Cylance": {
+            "method": "blacklist",
+            "engine_name": "Cylance",
+            "engine_version": "3.0.0.0",
+            "engine_update": "20260702",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "SentinelOne": {
+            "method": "blacklist",
+            "engine_name": "SentinelOne",
+            "engine_version": "7.7.0.1",
+            "engine_update": "20260623",
+            "category": "type-unsupported",
+            "result": null
+          },
+          "Trustlook": {
+            "method": "blacklist",
+            "engine_name": "Trustlook",
+            "engine_version": "1.0",
+            "engine_update": "20260706",
+            "category": "type-unsupported",
+            "result": null
+          }
+        },
+        "times_submitted": 2,
+        "tlsh": "T16A317474CC872D0722F2EBB5ABD1B1488564094253852A507991B24BFFD5305D7DEACD",
+        "magic": "HTML document, Unicode text, UTF-8 (with BOM) text, with CRLF line terminators",
+        "sha256": "ab6049651ad16e313a7f7ec4bb6714e8fcbe2e84fb6b3cba3bef194de3b1baff",
+        "names": [
+          "eicar.com"
+        ],
+        "meaningful_name": "eicar.com",
+        "type_description": "HTML",
+        "last_analysis_date": 1783321159,
+        "available_tools": [
+          "sigcheck"
+        ],
+        "unique_sources": 1,
+        "downloadable": false,
+        "magika": "HTML",
+        "threat_severity": {
+          "version": 5,
+          "threat_severity_level": "SEVERITY_NONE",
+          "threat_severity_data": {},
+          "last_analysis_date": "1783321181",
+          "level_description": "No severity score data"
+        },
+        "reputation": 0,
+        "last_modification_date": 1784622303
+      }
+    }
+  ],
+  "meta": {
+    "cursor": "eJwVjs2KwyAYRV9Jm5rOLGZTqimWJMTop7jTJBBQW0sD_WEefpzlvdx7OPhwOJD6a7cjv0JtdgjzdUIBTRVF7Xm2ynQvb-zJKXYcqiMfAj7N1dovaXrKlPmicD2Y3A4o37TOdkaEug_vgdqbDoK1MStp1q4N6qNTDp7FWqVoXQwfCWL09PtceusBiI7i2rK8jZJbF8hda8yWGDdIuIPm8dRhhpLvovwBl52OlYNoyr4TjOLiAwuLRpm1L7y68HtH928tOwcIPQuPt4HUQh4dNOumJb94ijeQohc4Z5kwX2J4j-nfNz-KF-sUOav0Kjnuy7_xkPMo0c8faMBpKA==",
+    "total_hits": 166,
+    "execution_time_s": 0.408439189,
+    "allowed_orders": [
+      "first_submission_date",
+      "last_submission_date",
+      "positives",
+      "times_submitted",
+      "size",
+      "unique_sources",
+      "gti_score"
+    ],
+    "st_search": true,
+    "estimated_total_hits": true,
+    "days_back": 90
+  },
+  "links": {
+    "self": "https://www.virustotal.com/api/v3/intelligence/search?query=name:\"eicar.com\"%20fs:2025-01-01%2B&limit=5",
+    "next": "https://www.virustotal.com/api/v3/intelligence/search?query=name%3A%22eicar.com%22+fs%3A2025-01-01%2B&limit=5&cursor=eJwVjs2KwyAYRV9Jm5rOLGZTqimWJMTop7jTJBBQW0sD_WEefpzlvdx7OPhwOJD6a7cjv0JtdgjzdUIBTRVF7Xm2ynQvb-zJKXYcqiMfAj7N1dovaXrKlPmicD2Y3A4o37TOdkaEug_vgdqbDoK1MStp1q4N6qNTDp7FWqVoXQwfCWL09PtceusBiI7i2rK8jZJbF8hda8yWGDdIuIPm8dRhhpLvovwBl52OlYNoyr4TjOLiAwuLRpm1L7y68HtH928tOwcIPQuPt4HUQh4dNOumJb94ijeQohc4Z5kwX2J4j-nfNz-KF-sUOav0Kjnuy7_xkPMo0c8faMBpKA%3D%3D"
+  }
+}

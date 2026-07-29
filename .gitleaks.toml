@@ -5,8 +5,13 @@ useDefault = true                    # keep the FULL built-in ruleset; rules bel
 
 [allowlist]                          # v8.25+: [[allowlists]]
 description = "false positives"
+regexTarget = "line"
 paths = ['''\.gitleaks\.toml''']     # don't scan our own config (it carries rule regexes)
-# regexes = ['''YOUR_[A-Z_]*_(KEY|TOKEN)''']   # add real FPs here as they appear
+regexes = [
+  # X.509 certificate metadata inside captured VT API fixtures (public cert
+  # fields, not secrets): "subject_key_identifier": "<40-hex>", "keyid": "<40-hex>"
+  '''"(subject_key_identifier|keyid)": "[0-9a-f]{40}"''',
+]
 
 # --- ADD-ON rules: ids are unique + jw-prefixed so no built-in rule is ever overridden ---
 
