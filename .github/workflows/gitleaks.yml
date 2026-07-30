@@ -9,7 +9,7 @@ jobs:
   scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { fetch-depth: 0 }        # full history for the content scan + git log --all
       - run: sudo apt-get update && sudo apt-get install -y gitleaks
       - run: gitleaks detect --source . --config .gitleaks.toml --redact -v          # file content
