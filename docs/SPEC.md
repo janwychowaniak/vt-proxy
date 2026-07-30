@@ -295,6 +295,14 @@ Environment variables, loaded and validated at startup via pydantic-settings
 
 Listen address/port are deployment concerns (uvicorn/compose), not app config.
 
+Outbound proxying needs no configuration of its own: the standard
+`HTTP_PROXY` / `HTTPS_PROXY` / `NO_PROXY` environment variables are honored
+for VT traffic (httpx's `trust_env` default is deliberately left enabled —
+this is a contract, not an accident). Deployments behind an egress proxy
+point the service at it purely via runtime environment; custom CA trust, if
+the proxy intercepts TLS, is a derived-image concern (`SSL_CERT_FILE`), never
+a code change.
+
 ## 11. Logging
 
 - stdout/stderr only; no files, no rotation logic in-app.
