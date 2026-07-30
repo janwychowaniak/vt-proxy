@@ -1,5 +1,8 @@
 # vt-proxy
 
+[![ci](https://github.com/janwychowaniak/vt-proxy/actions/workflows/ci.yml/badge.svg)](https://github.com/janwychowaniak/vt-proxy/actions/workflows/ci.yml)
+[![gitleaks](https://github.com/janwychowaniak/vt-proxy/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/janwychowaniak/vt-proxy/actions/workflows/gitleaks.yml)
+
 A small, self-hosted, **read-only** HTTP proxy in front of the
 [VirusTotal API v3](https://docs.virustotal.com/reference/overview). It answers
 IOC reputation questions — file hashes, IP addresses, domains, URLs — in one
