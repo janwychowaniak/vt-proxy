@@ -1,0 +1,36 @@
+[project]
+name = "vt-proxy"
+version = "0.1.0"
+description = "Read-only VirusTotal API v3 reputation proxy with a stable, analyst-friendly JSON envelope"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Jan Wychowaniak" }]
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "httpx>=0.28",
+    "ioc-typing==0.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4"]
