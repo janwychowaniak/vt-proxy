@@ -40,6 +40,10 @@ vt_get url_example_com     "/urls/$URLID"
 IQ=$(python3 -c "import urllib.parse; print(urllib.parse.quote('name:\"eicar.com\" fs:2025-01-01+'))")
 vt_get intel_search_eicar_by_name "/intelligence/search?query=$IQ&limit=5"
 
+IQ2=$(python3 -c "import urllib.parse; print(urllib.parse.quote('name:\"eicar.com\" ls:2026-06-30+'))")
+vt_get intel_search_ls_window  "/intelligence/search?query=$IQ2&limit=3"
+vt_get intel_search_ls_ordered "/intelligence/search?query=$IQ2&limit=3&order=last_submission_date-"
+
 # --- edge/error shapes ----------------------------------------------------
 vt_get file_unknown_404        "/files/0f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff0"
 vt_get error_404_malformed_hash "/files/not-a-valid-hash"

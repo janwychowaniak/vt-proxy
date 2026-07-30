@@ -11,7 +11,7 @@ supports a name→hash sample lookup, returning VT's knowledge in a stable,
 analyst-friendly JSON envelope with an explicit flag-score (how many vendors
 flagged the IOC).
 
-- Functional specification: `docs/SPEC.md` — the source of truth once present.
+- Functional specification: `docs/SPEC.md` — the source of truth.
 - Research notes and captured VT v3 responses: `docs/research/`.
 
 ## Hard constraints (never violate)

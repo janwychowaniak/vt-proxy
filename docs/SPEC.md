@@ -1,7 +1,7 @@
 # vt-proxy — functional specification
 
-**Status: APPROVED (2026-07-29).** This file is the source of truth for
-implementation. Design decisions are marked `[D#]` inline and recorded in
+**Status: APPROVED (2026-07-29; amended 2026-07-30 — post-audit fixes and
+decisions D9–D11).** This file is the source of truth for implementation. Design decisions are marked `[D#]` inline and recorded in
 [§13](#13-decision-record); observed VT behavior they build on is documented
 in [`research/NOTES.md`](research/NOTES.md).
 
@@ -40,7 +40,9 @@ services) a **simpler and more stable contract than raw VT**:
   `[D1]`
 - All paths carry a **`/v1` prefix** (cheap insurance for a public project).
   `[D2]`
-- No trailing slashes. `Content-Type: application/json`, UTF-8.
+- No trailing slashes, and no redirects to fix them: a trailing-slash path is
+  an enveloped 404 (`redirect_slashes` off). `Content-Type: application/json`,
+  UTF-8.
 - Unknown fields in request bodies are **rejected** (`422`) — catches typos
   like `positives_tresh` instead of silently ignoring them.
 - Interactive OpenAPI docs (`/docs`, `/openapi.json`) stay enabled — the
@@ -61,6 +63,9 @@ services) a **simpler and more stable contract than raw VT**:
 Upstream mapping: `/files/{hash}`, `/ip_addresses/{ip}`, `/domains/{domain}`,
 `/urls/{base64url(url) without padding}`, `/intelligence/search`.
 
+Health response shape:
+`200 {"status": "ok", "name": "vt-proxy", "version": "<package version>"}`.
+
 ## 5. Score endpoints — request
 
 Identical body for all five — one uniform `artifact` field regardless of
@@ -77,6 +82,9 @@ IOC type:
 - `artifact` is validated with **ioc-typing** before any VT call. Typed
   endpoints require the matching type; mismatch or unrecognizable input is a
   `422`, *not* a VT roundtrip.
+- For `file`, accepted hash algorithms are exactly **md5, sha1, sha256**; any
+  other hash-looking input (e.g. sha512) is a `422` — VT would answer 404 and
+  masquerade as a misleading `known: false` otherwise. `[D10]`
 - `positives_thresh` is inclusive: `thresh_gte = (score >= positives_thresh)`.
   Default `1` = "at least one vendor flagged it".
 - `msg` is echoed in the response and written to the log line; it never
@@ -130,7 +138,10 @@ Envelope rules:
 
 - All four top-level keys are always present.
 - `query.type` is the resolved type (`file | ip | domain | url`) — declared by
-  the endpoint or auto-detected by omni.
+  the endpoint or auto-detected by omni. This is *our* vocabulary; it
+  deliberately coexists with VT's own naming in the same response
+  (`query.type: "ip"` sits beside `report.type: "ip_address"` — `report` is
+  never renamed).
 - `verdict.score` = `report.attributes.last_analysis_stats.malicious`.
 - `verdict.stats` duplicates `last_analysis_stats` for caller convenience —
   the primary consumables sit in one shallow place; deliberate redundancy.
@@ -164,13 +175,15 @@ Request:
 }
 ```
 
-- VT query: `name:"<name>" ls:<today - days_ago>+` (last-submission recency
-  window). The `name` is embedded in a VT query string — hence the hard ban
-  on `"` inside it (query-injection guard); any other character passes
-  through literally.
-- Results ordered **newest first** (server-side ordering by submission date if
-  the `order` parameter verifies at implementation time — research open
-  question #1 — otherwise sorted by us within the fetched page).
+- VT query: `name:"<name>" ls:<today(UTC) - days_ago>+` (last-submission
+  recency window; the `ls:` modifier is verified live — research NOTES §7).
+  The `name` is embedded in a VT query string — hence the hard ban on `"`
+  inside it (query-injection guard); any other character passes through
+  literally.
+- Results ordered **newest first**, server-side:
+  `order=last_submission_date-` (syntax verified live — research NOTES §7).
+  Pagination cursors are never followed; the response is one page of at most
+  `limit` matches.
 
 Response:
 
@@ -182,19 +195,27 @@ Response:
   "matches": [
     {
       "sha256": "f4041df12ec3d79722af2cf64a1dbce9de928b773c61e11aaa9359e7fdbb6ac0",
-      "sha1": "…",
+      "sha1": "9f45ae3ae43708d07f7af586d5e411256b7716aa",
       "md5": "6a9f6c15ac2b8f80a60c0103539c9ebd",
-      "size": 68,
-      "type_description": "Shell script",
+      "size": 127,
+      "type_description": "Powershell",
       "meaningful_name": "CEPlus.sh",
-      "first_submission_date": "2026-04-28T14:08:51Z",
-      "last_submission_date": "2026-04-28T14:08:51Z",
+      "first_submission_date": "2026-04-30T12:08:51Z",
+      "last_submission_date": "2026-07-29T13:24:02Z",
       "score": 56,
-      "stats": { "malicious": 56, "…": "…" }
+      "stats": {
+        "malicious": 56, "suspicious": 0, "undetected": 11, "harmless": 0,
+        "timeout": 0, "confirmed-timeout": 0, "failure": 1, "type-unsupported": 7
+      }
     }
   ]
 }
 ```
+
+Match values are verbatim from the first hit of
+[`research/fixtures/intel_search_eicar_by_name.json`](research/fixtures/intel_search_eicar_by_name.json)
+(epochs converted to ISO); the `query` echo and `total_hits` lines are
+illustrative and not mutually consistent with that capture's parameters.
 
 - `matches` are **trimmed projections**, not full VT objects (a full file
   object is 20–45 KB; ten of them would be a quarter-megabyte answer to
@@ -202,6 +223,12 @@ Response:
   Full detail is one `/v1/score/file` call away with the returned hash. `[D7]`
 - Projection dates are converted to ISO-8601 UTC (we own these fields; raw VT
   epochs remain available via the follow-up score call).
+- Every projection field except `score` and `stats` is **nullable**: emitted
+  as `null` when VT omits the attribute (`meaningful_name` frequently is
+  absent). `sha256` falls back to the item's `data.id` (identical for file
+  objects); absent dates are `null`.
+- `total_hits` is VT's `meta.total_hits` passed through (VT flags it as an
+  estimate).
 - Zero matches → `known: false`, `matches: []`, `total_hits: 0`, HTTP 200.
 - Callers that just want "the hash for this name" take `matches[0].sha256`.
 
@@ -220,7 +247,15 @@ One error body shape for **everything** non-2xx, including schema validation
 }
 ```
 
-`upstream` is present only when VT itself answered with an error object.
+`upstream` is present only when VT itself answered with a **parseable** error
+object (an HTML page from a load balancer yields no `upstream`, not a partial
+one). Its presence also disambiguates who noticed a timeout (see `[D9]`).
+
+Boundary between the two 422 codes: **shape** failures (missing, empty or
+mistyped fields, out-of-range values, unknown fields, unparseable JSON) are
+`VALIDATION_ERROR`; **content** failures (unrecognized or unsupported
+artifact, type mismatch for the endpoint, `"` in `name`) are
+`INVALID_ARTIFACT`.
 
 | Situation | HTTP | `error.code` |
 |---|---|---|
@@ -228,9 +263,12 @@ One error body shape for **everything** non-2xx, including schema validation
 | artifact fails ioc-typing / wrong type for endpoint / undetermined omni / forbidden `"` in name | 422 | `INVALID_ARTIFACT` |
 | VT 401/403 — key wrong or tier-insufficient (server misconfig, not caller's fault) | 502 | `UPSTREAM_AUTH` `[D8]` |
 | VT 429 (quota / rate limit) | 429 | `UPSTREAM_QUOTA` (Retry-After passed through if present) |
-| VT 5xx or transient errors | 502 | `UPSTREAM_ERROR` |
-| VT unreachable / connect error / timeout | 504 | `UPSTREAM_TIMEOUT` |
+| VT 5xx other than 504 (incl. 503 `TransientError`) | 502 | `UPSTREAM_ERROR` |
+| any other unmapped VT status (e.g. 400 `BadRequestError`) | 502 | `UPSTREAM_ERROR` |
+| VT unreachable / connect error / client-side timeout / VT's own 504 `DeadlineExceededError` | 504 | `UPSTREAM_TIMEOUT` `[D9]` |
 | VT 200 but response fails our minimal structure validation | 502 | `UPSTREAM_SCHEMA` |
+| unknown path on this API | 404 | `NOT_FOUND` |
+| known path, wrong HTTP method | 405 | `METHOD_NOT_ALLOWED` |
 | unexpected internal failure | 500 | `INTERNAL` |
 
 **Never an error**: VT 404 `NotFoundError` on a well-formed artifact → HTTP
@@ -239,7 +277,9 @@ One error body shape for **everything** non-2xx, including schema validation
 Minimal structure we validate on VT 200s: `data.id`, `data.type`,
 `data.attributes.last_analysis_stats` (for search: per-item), everything else
 opaque — mirrors the research finding that this is the entire contract we
-rely on.
+rely on. For search, one failing item fails the **whole request** with
+`502 UPSTREAM_SCHEMA` — silently dropping it would corrupt the
+`matches`/`total_hits` relationship without the caller knowing.
 
 ## 10. Configuration (12-Factor III)
 
@@ -258,8 +298,11 @@ Listen address/port are deployment concerns (uvicorn/compose), not app config.
 ## 11. Logging
 
 - stdout/stderr only; no files, no rotation logic in-app.
-- One structured line per handled request: endpoint, resolved type, artifact,
-  `known`, `score`, `positives_thresh`, `msg`, VT HTTP status, duration.
+- Format: **JSON lines**. `[D11]`
+- One line per lookup/search request: endpoint, resolved type, artifact (the
+  `name` for search), `known`, `score` (`total_hits` for search),
+  `positives_thresh`, `msg`, VT HTTP status, duration in milliseconds.
+  `/v1/health` and the OpenAPI docs endpoints do not emit these lines.
 - Errors log the mapped `error.code` plus upstream detail.
 - The API key never appears in any log line (including httpx debug output).
 
@@ -285,6 +328,18 @@ All approved by the maintainer, 2026-07-29:
   objects are one `/v1/score/file` call away.
 - **[D8] VT auth failures surface as 502 `UPSTREAM_AUTH`, not 401** — a 401
   would wrongly imply the caller must authenticate.
+
+Approved by the maintainer 2026-07-30, after an independent consistency audit
+and an implementer readback of this document:
+
+- **[D9] VT's own 504 (`DeadlineExceededError`) maps to 504
+  `UPSTREAM_TIMEOUT`**, same as client-side timeouts — one symptom, one code;
+  which side noticed the timeout stays visible via the presence of
+  `upstream`.
+- **[D10] File hashes are md5/sha1/sha256 only** — anything else is a 422
+  `INVALID_ARTIFACT` instead of a misleading `known: false` after a VT 404.
+- **[D11] Logs are JSON lines on stdout**; only lookup/search requests emit
+  the per-request line.
 
 ## 14. Explicitly out of scope (v1)
 

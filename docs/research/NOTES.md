@@ -1,7 +1,7 @@
 # VirusTotal API v3 — research notes (live probes)
 
-Captured **2026-07-29** against `https://www.virustotal.com/api/v3` with a paid
-API key. All probes are read-only GETs. Raw responses (pretty-printed,
+Captured **2026-07-29** (supplemented **2026-07-30** with `ls:`/`order`
+probes) against `https://www.virustotal.com/api/v3` with a paid API key. All probes are read-only GETs. Raw responses (pretty-printed,
 otherwise verbatim) live in [`fixtures/`](fixtures/) — see the
 [manifest](fixtures/README.md). The probe script is [`probe.sh`](probe.sh);
 it reads the key from `.env` and an automated post-capture check verifies the
@@ -23,7 +23,8 @@ this file records what the API actually does.
   (ioc-typing) is on us if we want to distinguish "garbage in" from "unknown".
 - Errors come as `{"error": {"code": "...", "message": "..."}}` + HTTP status.
 - Intelligence search (name→hash) works on this key tier; cursor-paginated;
-  supports server-side ordering (e.g. newest-first) via `allowed_orders`.
+  the `ls:` date modifier and server-side newest-first ordering
+  (`order=last_submission_date-`) are both verified live.
 - All timestamps are Unix epochs (UTC).
 
 ---
@@ -38,6 +39,8 @@ this file records what the API actually does.
 | `domain_example_com.json` | `GET /domains/example.com` | 200 |
 | `url_example_com.json` | `GET /urls/aHR0cDovL2V4YW1wbGUuY29tLw` (`http://example.com/`) | 200 |
 | `intel_search_eicar_by_name.json` | `GET /intelligence/search?query=name:"eicar.com" fs:2025-01-01+&limit=5` | 200 |
+| `intel_search_ls_window.json` | `GET /intelligence/search?query=name:"eicar.com" ls:2026-06-30+&limit=3` | 200 |
+| `intel_search_ls_ordered.json` | as above, plus `&order=last_submission_date-` | 200 |
 | `file_unknown_404.json` | `GET /files/<random 64-hex>` | 404 |
 | `error_404_malformed_hash.json` | `GET /files/not-a-valid-hash` | 404 |
 | `error_401_wrong_key.json` | `GET /files/<eicar md5>` with a bogus key | 401 |
@@ -163,15 +166,18 @@ Response shape differs from single lookups — it is a collection:
 
 - Pagination: opaque `meta.cursor` / `links.next`.
 - Query `name:"eicar.com" fs:2025-01-01+` returned files whose `names` array
-  contains the queried name (`meaningful_name` may differ).
-- `meta.allowed_orders` suggests server-side ordering — for our
-  "newest sample with this name" endpoint, ordering by
-  `last_submission_date`/`first_submission_date` descending would replace any
-  client-side newest-picking. **Verify exact `order` param syntax at
-  implementation time.**
-- `meta.days_back: 90` appeared despite `fs:` covering ~7 months — semantics
-  unclear (default search window?). **Open question — test how `fs:` and
-  `days_back` interact before relying on date filtering.**
+  contains the queried name exactly **or as a substring** (4 of 5 hits exact;
+  one hit only has `eicar.com.txt`); `meaningful_name` may differ from the
+  queried name.
+- The `ls:` (last submission) modifier **verified live (2026-07-30)**:
+  `ls:2026-06-30+` cut `total_hits` from 166 to 124
+  (`intel_search_ls_window.json`) — date filtering demonstrably works.
+- Server-side ordering **verified live (2026-07-30)**:
+  `order=last_submission_date-` returns 200 with `last_submission_date`
+  strictly descending (`intel_search_ls_ordered.json`).
+- `meta.days_back: 90` appears constantly (under `fs:` ~7-month and `ls:`
+  30-day windows alike) while the date filters demonstrably work — treat
+  `days_back` as informational noise.
 
 ## 8. Attribute inventory (captured keys per type)
 
@@ -215,7 +221,11 @@ Everything is passed through opaquely; we only *rely* on `last_analysis_stats`.
   title, tld, total_votes, url, user_agent, web_category`
 
 Payload sizes observed: 20–45 KB per object (`last_analysis_results` with
-~90 engines dominates), 125 KB for a 5-hit search.
+75–92 engines dominates), 125 KB for a 5-hit search.
+
+IPv6 caveat: the ip6 capture's attribute key set is a subset of the IPv4
+list above — it lacks `crowdsourced_context`, `first_seen_itw_date` and
+`last_seen_itw_date`. The `ip_address` list reflects the IPv4 capture.
 
 ## 9. Response headers
 
@@ -225,7 +235,10 @@ quota introspection is ever wanted, it's a separate endpoint
 
 ## 10. Open questions carried to implementation
 
-1. `order` parameter syntax for intelligence search (newest-first).
-2. `meta.days_back` vs `fs:` modifier interaction.
+1. ~~`order` parameter syntax for intelligence search~~ — **resolved
+   2026-07-30**: `order=last_submission_date-`, verified live (§7).
+2. ~~`meta.days_back` vs date modifier interaction~~ — **resolved
+   2026-07-30**: `fs:`/`ls:` filters demonstrably work; `days_back` is
+   informational (§7).
 3. Shape of 429 `QuotaExceededError` (unobserved; handle generically).
 4. GUI denominator formula (cosmetic only; stats are passed through anyway).
