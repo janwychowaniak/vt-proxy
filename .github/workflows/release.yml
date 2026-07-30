@@ -1,0 +1,38 @@
+name: release
+on:
+  push:
+    tags: ["v*"]
+
+# The repo default for GITHUB_TOKEN is read-only; this explicit block
+# elevates exactly one scope, for this workflow only.
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Tag must match pyproject version
+        run: |
+          pkg=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          test "v$pkg" = "$GITHUB_REF_NAME" || {
+            echo "git tag $GITHUB_REF_NAME does not match pyproject version $pkg"; exit 1; }
+
+      - name: Log in to ghcr.io
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Build and push
+        run: |
+          version=${GITHUB_REF_NAME#v}
+          image=ghcr.io/${{ github.repository }}
+          docker build \
+            --label "org.opencontainers.image.source=https://github.com/${{ github.repository }}" \
+            --label "org.opencontainers.image.description=Read-only VirusTotal API v3 reputation proxy" \
+            --label "org.opencontainers.image.licenses=MIT" \
+            -t "$image:$version" -t "$image:latest" .
+          docker push "$image:$version"
+          docker push "$image:latest"
+          echo "published $image:$version (+latest)"
