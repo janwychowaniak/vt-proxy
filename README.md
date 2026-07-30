@@ -51,6 +51,10 @@ docker compose up -d        # legacy docker-compose works too
 curl http://127.0.0.1:11000/v1/health
 ```
 
+Prebuilt images are published on version tags:
+`docker pull ghcr.io/janwychowaniak/vt-proxy:0.1.0` (`latest` tracks the
+newest release).
+
 ## API
 
 All lookup endpoints are `POST` with a JSON body — read-only in semantics,
@@ -215,7 +219,7 @@ intercepts TLS, add its CA in a thin derived image and point Python's trust
 at the system store:
 
 ```dockerfile
-FROM vt-proxy:0.1.0
+FROM ghcr.io/janwychowaniak/vt-proxy:0.1.0
 USER root
 COPY corp-ca.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
