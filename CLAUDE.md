@@ -45,6 +45,24 @@ content.
 - Docker + Compose for build/run; logs go to stdout/stderr only (no log
   files, no log volumes — rotation is Docker's job)
 
+## Development
+
+- `uv sync` — full environment (interpreter pinned by `.python-version`)
+- `uv run pytest` — the offline suite; needs no VT key and no network **by
+  design** (CI relies on this — keep it that way)
+- `uv run ruff check` / `uv run ruff format` — lint / format
+- `VT_LIVE_TESTS=1 uv run pytest tests/test_live_smoke.py` — optional live
+  smoke tests; require a real key in `.env`
+- Local run:
+  `uv run uvicorn --factory vt_proxy.main:create_app --host 127.0.0.1 --port 11000`
+
+## Release
+
+Bump `version` in `pyproject.toml`, commit, tag `v<version>`, push the tag.
+The release workflow hard-fails on a tag/pyproject version mismatch, then
+builds and publishes `ghcr.io/janwychowaniak/vt-proxy:<version>` + `:latest`
+(public, linked to this repo). CI must be green on main before tagging.
+
 ## Key decisions
 
 - VirusTotal API **v3** only; a paid API key is assumed.
