@@ -1,0 +1,9 @@
+# Whitelist: nothing enters the build context unless listed here.
+# This structurally prevents .env (and anything else) from ever
+# reaching an image layer.
+*
+!pyproject.toml
+!uv.lock
+!README.md
+!LICENSE
+!src/

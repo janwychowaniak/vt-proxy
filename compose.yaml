@@ -1,0 +1,18 @@
+services:
+  vt-proxy:
+    build: .
+    image: vt-proxy:0.1.0
+    container_name: vt-proxy
+    init: true
+    restart: unless-stopped
+    ports:
+      # 127.0.0.1 binding is a hard design decision (SPEC §2: localhost-only,
+      # no auth) — do not widen it. It also keeps Docker from punching the
+      # port through the host firewall for the outside world.
+      - "127.0.0.1:${VT_PROXY_PORT:-11000}:8000"
+    env_file: .env # VT_API_KEY (+ optional overrides, see .env.example)
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
