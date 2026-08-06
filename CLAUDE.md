@@ -26,7 +26,10 @@ flagged the IOC).
 - **The VT API key lives in the environment** (`.env` locally, never
   committed). Never print, log, or copy it into fixtures, docs, or commit
   messages. Gitleaks hooks + CI enforce secret hygiene; activate hooks once
-  per clone: `git config core.hooksPath .githooks`.
+  per clone: `git config core.hooksPath .githooks`. The add-on rules in
+  `.gitleaks.toml` are prefix-anchored on purpose — the built-in generic rule
+  is not a reliable fallback; the file explains why. Measure any change to
+  them against a corpus of fake keys before committing.
 
 ## Language
 
