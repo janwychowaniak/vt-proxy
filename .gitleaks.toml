@@ -14,22 +14,91 @@ regexes = [
 ]
 
 # --- ADD-ON rules: ids are unique + jw-prefixed so no built-in rule is ever overridden ---
+#
+# Why these exist even though useDefault=true already ships ~150 rules: the
+# built-in `generic-api-key` is the only net that covers unprefixed secrets, and
+# it is silently disabled by its own stopword allowlist whenever the *value*
+# contains a common word. Measured on this repo's config:
+#
+#   FOO_KEY=Xk93mZqR7tLbW2vNcPdH4sJyU6eA1gFo    -> detected
+#   FOO_KEY=Xk93mZqR7ttokenW2vNcPdH4sJyU6eA1g   -> NOT detected  ("token" inside)
+#   ANTHROPIC_API_KEY=sk-ant-api03-<95 chars>   -> NOT detected  ("ant" inside)
+#
+# Every rule below is anchored on a literal provider prefix (or an explicit
+# assignment context), so it fires regardless of entropy and stopwords.
+#
+# Keyword hygiene: `keywords` is a prefilter, but adding one that occurs in
+# ordinary prose (e.g. "apikey") also suppresses `generic-api-key` on that same
+# line. Keep every keyword specific enough that it only appears next to a real
+# secret, and make sure the rule's own regex covers whatever it lets through.
 
 # A VirusTotal API key is 64 hex chars with no distinctive prefix — the same shape
 # as a SHA-256 hash, which this project handles constantly. The rule therefore
-# requires an assignment context (VT_API_KEY=..., virustotal_key: "...") instead of
-# matching bare 64-hex; bare high-entropy secrets stay covered by the built-in
-# generic-api-key/entropy rules.
+# requires an assignment or header context instead of matching bare 64-hex; bare
+# high-entropy secrets stay covered by the built-in generic-api-key/entropy rules.
+# Covers: VT_API_KEY=..., virustotal_key: "...", vtApiKey = "...",
+#         {"x-apikey": "..."}, curl -H "x-apikey: ...", ?apikey=... (legacy v2 URL).
 [[rules]]
 id = "jw-virustotal-key"
-description = "VirusTotal API key in an assignment"
-regex = '''(?i)\b(?:virustotal|vt)[_-]?(?:api[_-]?)?key\b\s*[:=]\s*['"]?[0-9a-f]{64}\b'''
-keywords = ["virustotal", "vt_key", "vt-key", "vtkey", "vt_api", "vt-api"]
+description = "VirusTotal API key in an assignment or x-apikey header"
+regex = '''(?i)\b(?:(?:virustotal|vt)[_-]?(?:api[_-]?)?key|(?:x-)?apikey)['"]?\s*[:=]\s*['"]?[0-9a-f]{64}\b'''
+keywords = ["virustotal", "vtkey", "vt_key", "vt-key", "vtapi", "vt_api", "vt-api", "x-apikey"]
 
-# More field-proven add-ons, same shape, if these providers ever get used here:
-#   ghp_[0-9A-Za-z]{36}                         github-pat-classic     keyword ghp_
-#   github_pat_[0-9A-Za-z_]{22,255}             github-pat-finegrained
-#   sk-ant-api03-[0-9A-Za-z_-]{80,120}          anthropic
-#   sk-or-v1-[0-9a-f]{64}                       openrouter
-#   gsk_[0-9A-Za-z]{40,60}                      groq
-#   AIza[0-9A-Za-z_-]{35}                       google (also a built-in; add for certainty)
+# Providers that plausibly sit in this maintainer's environment. Not because
+# vt-proxy uses them, but because an accidental `env > file` commit only needs
+# ONE rule to trip — and the ones below are exactly the shapes the built-in
+# ruleset either misses outright or covers only via the fragile generic rule.
+
+# Missed outright by the built-ins (the "ant" stopword above).
+[[rules]]
+id = "jw-anthropic-key"
+description = "Anthropic API key"
+regex = '''\bsk-ant-[A-Za-z0-9]{2,12}-[A-Za-z0-9_-]{80,120}\b'''
+keywords = ["sk-ant-"]
+
+[[rules]]
+id = "jw-openai-key"
+description = "OpenAI API key"
+regex = '''\bsk-(?:(?:proj|svcacct|admin)-[A-Za-z0-9_-]{20,200}|[A-Za-z0-9]{48})\b'''
+keywords = ["sk-proj-", "sk-svcacct-", "sk-admin-", "sk-"]
+
+[[rules]]
+id = "jw-openrouter-key"
+description = "OpenRouter API key"
+regex = '''\bsk-or-v1-[0-9a-f]{64}\b'''
+keywords = ["sk-or-v1-"]
+
+[[rules]]
+id = "jw-groq-key"
+description = "Groq API key"
+regex = '''\bgsk_[A-Za-z0-9]{40,60}\b'''
+keywords = ["gsk_"]
+
+[[rules]]
+id = "jw-google-api-key"
+description = "Google API key"
+regex = '''\bAIza[A-Za-z0-9_-]{35}\b'''
+keywords = ["aiza"]
+
+[[rules]]
+id = "jw-huggingface-token"
+description = "Hugging Face access token"
+regex = '''\bhf_[A-Za-z0-9]{30,40}\b'''
+keywords = ["hf_"]
+
+# A bare 40-char base64 blob is unmatchable without false positives, so this one
+# is context-anchored on the variable name — the shape an env dump would have.
+[[rules]]
+id = "jw-aws-secret-access-key"
+description = "AWS secret access key in an assignment"
+regex = '''(?i)\baws[_-]?secret[_-]?access[_-]?key\b\s*[:=]\s*['"]?[A-Za-z0-9/+=]{40}\b'''
+keywords = ["aws_secret", "aws-secret", "awssecret"]
+
+# Deliberately NOT added, to keep the false-positive rate at zero:
+#   postgres://user:pass@host  — fires on the placeholder URLs in docs/
+#   telegram bot tokens        — no plausible path into this environment
+# Already covered by built-in rules, no add-on needed: ghp_ / github_pat_
+# (github-pat, github-fine-grained-pat), glpat- (gitlab-pat), npm_
+# (npm-access-token), pypi- (pypi-upload-token), SG. (sendgrid-api-token),
+# sk_live_ (stripe-access-token), xoxb- (slack-access-token), AKIA
+# (aws-access-token), PEM private keys (private-key).
