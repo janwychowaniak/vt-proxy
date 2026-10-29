@@ -23,6 +23,9 @@ flagged the IOC).
   deliberate, non-negotiable security boundary.
 - **Localhost-only, no auth by design.** Intended for callers on the same
   trusted machine; the container port must be published on `127.0.0.1` only.
+- **TLS verification is never switched off.** `CA_FILE` only adds certificate
+  authorities to the default trust; no setting disables verification
+  (`docs/SPEC.md` §10, `[D12]`).
 - **The VT API key lives in the environment** (`.env` locally, never
   committed). Never print, log, or copy it into fixtures, docs, or commit
   messages. Gitleaks hooks + CI enforce secret hygiene; activate hooks once
@@ -115,5 +118,7 @@ next release's log.
   passing VT's v3 error semantics through where sensible.
 - All lookup endpoints are read-only in semantics regardless of the HTTP
   method chosen for transport (see `docs/SPEC.md`).
-- Tests run offline against captured fixtures; optional live smoke tests are
-  gated behind an env flag.
+- Tests run offline against captured fixtures, and the `CA_FILE` trust tests
+  against TLS servers on loopback with certificates generated per run
+  (`trustme`, a dev-only dependency). Optional live smoke tests are gated
+  behind an env flag.
