@@ -26,7 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - run: docker build -t vt-proxy:ci .
+      - name: Build with the classic builder (gate against BuildKit-only syntax)
+        run: DOCKER_BUILDKIT=0 docker build -t vt-proxy:ci .
       - name: Smoke-test the container (dummy key — health and pre-validation need no VT)
         run: |
           docker run -d --name vt-proxy -p 127.0.0.1:11000:8000 \

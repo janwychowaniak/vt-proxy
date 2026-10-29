@@ -19,20 +19,17 @@ jobs:
         run: |
           pkg=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
           test "v$pkg" = "$GITHUB_REF_NAME" || {
-            echo "git tag $GITHUB_REF_NAME does not match pyproject version $pkg"; exit 1; }
+            echo "::error::git tag $GITHUB_REF_NAME does not match pyproject version $pkg"; exit 1; }
 
-      - name: Log in to ghcr.io
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-
+      # Classic builder, same as the CI gate; OCI labels come from the
+      # Dockerfile. Login only after the build, so the registry credential
+      # exists for the push alone.
       - name: Build and push
         run: |
           version=${GITHUB_REF_NAME#v}
           image=ghcr.io/${{ github.repository }}
-          docker build \
-            --label "org.opencontainers.image.source=https://github.com/${{ github.repository }}" \
-            --label "org.opencontainers.image.description=Read-only VirusTotal API v3 reputation proxy" \
-            --label "org.opencontainers.image.licenses=MIT" \
-            -t "$image:$version" -t "$image:latest" .
+          DOCKER_BUILDKIT=0 docker build -t "$image:$version" -t "$image:latest" .
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
           docker push "$image:$version"
           docker push "$image:latest"
           echo "published $image:$version (+latest)"
