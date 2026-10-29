@@ -1,7 +1,7 @@
 services:
   vt-proxy:
     build: .
-    image: vt-proxy:0.1.0
+    image: ghcr.io/janwychowaniak/vt-proxy:latest # the published name, deliberately unpinned
     container_name: vt-proxy
     init: true
     restart: unless-stopped

@@ -53,7 +53,9 @@ curl http://127.0.0.1:11000/v1/health
 
 Prebuilt images are published on version tags:
 `docker pull ghcr.io/janwychowaniak/vt-proxy:0.1.0` (`latest` tracks the
-newest release).
+newest release). The compose file uses that same `latest` name:
+`docker compose pull` fetches the published image, while
+`docker compose up -d --build` builds it from your checkout.
 
 ## API
 
