@@ -31,7 +31,7 @@ jobs:
       # The release runs this only on a tag; here it runs on every push. The smoke tests
       # below then use the image the archive loaded back.
       - name: Archive round trip (save by tag, remove, load, compare Id)
-        run: .github/scripts/archive-image.sh vt-proxy ci "$(docker image inspect --format '{{.Id}}' vt-proxy:ci)"
+        run: .github/scripts/archive-image.sh vt-proxy ci -  # no record: this image is never pushed
       # Both runs: a read-only root filesystem and no tmpfs, since the service writes nothing,
       # with or without CA_FILE. A dummy key: health and pre-validation need no VT.
       - name: Smoke-test read-only, without CA_FILE

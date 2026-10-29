@@ -43,7 +43,10 @@ jobs:
       # Dockerfile. Login only after the build, so the registry credential
       # exists for the push alone. The step summary is the first record of the
       # digest and the image Id (the configuration digest, which survives
-      # docker save/load); CHANGELOG.md gets them by hand afterwards.
+      # docker save/load); CHANGELOG.md gets them by hand afterwards. The Id is
+      # read from the manifest the registry holds, not from the runner's .Id,
+      # which on the containerd image store is the manifest digest (0.2.0's
+      # erratum in CHANGELOG.md).
       - name: Build and push
         id: push
         run: |
@@ -55,7 +58,7 @@ jobs:
           docker push "$image:latest"
           digest=$(docker image inspect --format '{{index .RepoDigests 0}}' "$image:$version")
           digest=${digest#*@}
-          image_id=$(docker image inspect --format '{{.Id}}' "$image:$version")
+          image_id=$(docker manifest inspect "$image@$digest" | python3 -c 'import json, sys; print(json.load(sys.stdin)["config"]["digest"])')
           python=$(docker run --rm --entrypoint python "$image:$version" -c 'import platform; print(platform.python_version())')
           echo "digest=$digest" >> "$GITHUB_OUTPUT"
           echo "image-id=$image_id" >> "$GITHUB_OUTPUT"

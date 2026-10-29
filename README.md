@@ -291,8 +291,9 @@ The last line must print the image Id (configuration digest) that
 [`CHANGELOG.md`](CHANGELOG.md) records for the version. The Id survives the
 transfer where the registry digest does not: on Docker's default `overlay2`
 image store it is the digest of the image's configuration, which the archive
-carries byte for byte. The release workflow loads every archive back into a
-store without the image, and compares the Id, before it attaches the file.
+carries byte for byte. Before it attaches the file, the release workflow checks
+that the archive carries the configuration digest it published, and loads the
+archive back into a store without the image.
 
 The same Id can be checked without Docker: the archive's `manifest.json` names
 the configuration blob, and that blob's SHA-256 is the Id.
