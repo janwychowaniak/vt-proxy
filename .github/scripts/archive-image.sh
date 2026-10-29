@@ -9,6 +9,10 @@
 # The Id is what a receiving host compares after `docker load`: the digest of the image's
 # configuration, which the archive carries byte for byte, while the registry's digest does not
 # survive the transfer. CI runs this on every push; the release runs it on the published image.
+#
+# The removal is by Id, so it takes every tag on that Id, and the load brings back only
+# <repository>:<version>. Run it where that is the image's only tag, as in CI and the release;
+# on a workstation one build often carries several tags.
 set -euo pipefail
 
 repository=$1

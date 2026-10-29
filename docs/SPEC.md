@@ -1,7 +1,8 @@
 # vt-proxy — functional specification
 
 **Status: APPROVED (2026-07-29; amended 2026-07-30 — post-audit fixes and
-decisions D9–D11).** This file is the source of truth for implementation. Design decisions are marked `[D#]` inline and recorded in
+decisions D9–D11; amended 2026-10-29 — `CA_FILE`, decision D12).** This file is
+the source of truth for implementation. Design decisions are marked `[D#]` inline and recorded in
 [§13](#13-decision-record); observed VT behavior they build on is documented
 in [`research/NOTES.md`](research/NOTES.md).
 
@@ -58,13 +59,16 @@ services) a **simpler and more stable contract than raw VT**:
 | `POST /v1/score/url` | reputation of a URL |
 | `POST /v1/score` | **omni**: auto-detect artifact type, then behave as the matching endpoint `[D3]` |
 | `POST /v1/search/name` | name→hash lookup via VT Intelligence search |
-| `GET /v1/health` | liveness: static `ok` + app name/version; no VT call |
+| `GET /v1/health` | liveness: static `ok`, app name/version, whether `CA_FILE` is in use; no VT call |
 
 Upstream mapping: `/files/{hash}`, `/ip_addresses/{ip}`, `/domains/{domain}`,
 `/urls/{base64url(url) without padding}`, `/intelligence/search`.
 
 Health response shape:
-`200 {"status": "ok", "name": "vt-proxy", "version": "<package version>"}`.
+`200 {"status": "ok", "name": "vt-proxy", "version": "<package version>", "extra_ca": false}`.
+`extra_ca` is always present: `true` when `CA_FILE` is set and loaded (§10),
+`false` otherwise. Nothing else about the file appears — no path, fingerprints
+or subjects.
 
 ## 5. Score endpoints — request
 
@@ -292,6 +296,7 @@ Environment variables, loaded and validated at startup via pydantic-settings
 | `VT_BASE_URL` | no | `https://www.virustotal.com/api/v3` | override for tests/mocks |
 | `VT_TIMEOUT` | no | `30` | per-VT-request timeout, seconds |
 | `LOG_LEVEL` | no | `INFO` | log verbosity |
+| `CA_FILE` | no | — (unset or empty: absent) | PEM file of extra certificate authorities, trusted in addition to the default ones `[D12]` |
 
 Listen address/port are deployment concerns (uvicorn/compose), not app config.
 
@@ -299,9 +304,36 @@ Outbound proxying needs no configuration of its own: the standard
 `HTTP_PROXY` / `HTTPS_PROXY` / `NO_PROXY` environment variables are honored
 for VT traffic (httpx's `trust_env` default is deliberately left enabled —
 this is a contract, not an accident). Deployments behind an egress proxy
-point the service at it purely via runtime environment; custom CA trust, if
-the proxy intercepts TLS, is a derived-image concern (`SSL_CERT_FILE`), never
-a code change.
+point the service at it purely via runtime environment.
+
+**Extra CA trust (`CA_FILE`)** `[D12]`. When the proxy intercepts TLS, its
+certificate authority is given to the service as `CA_FILE`: the path of a PEM
+file holding one or more certificates — the proxy's root or, where it signs
+with an intermediate, the issuing chain.
+
+- The certificates are trusted **in addition to** the default trust of TLS with
+  VirusTotal: httpx's own default context, read from the environment as httpx
+  reads it (`SSL_CERT_FILE`, else `SSL_CERT_DIR`, else certifi's bundle).
+  Nothing from the default set is dropped. Unset or empty means absent, and the
+  client is then built exactly as without the variable.
+- Verification is never switched off. Hostname checking, the TLS 1.2 minimum
+  and Python's strict X.509 checks stay as the client sets them, so the
+  authority, and the certificates the proxy issues under it, must be
+  well-formed under them (CA basic constraints, a key usage that permits
+  certificate signing, key identifiers, subject alternative names on the
+  issued certificates). A failed verification is a transport error
+  (§9: `504 UPSTREAM_TIMEOUT`).
+- The file is read once, at startup; a replaced file takes effect on restart.
+  Text outside the PEM blocks never decides — the certificate loader does.
+  Startup checks neither validity dates nor CA flags: every certificate the
+  file yields is counted and trusted.
+- The service refuses to start when the file is missing, cannot be read, is
+  not a regular file, or yields no certificate (§11).
+- **The limit:** `CA_FILE` adds trust for TLS with VirusTotal, directly or
+  through a proxy tunnel; the TLS with an `https://` proxy endpoint itself
+  keeps the client's default trust (the system store and certifi's bundle).
+- `SSL_CERT_FILE` still works as a wholesale replacement of the default
+  bundle; `CA_FILE` adds to whatever it selects.
 
 ## 11. Logging
 
@@ -312,12 +344,21 @@ a code change.
   `positives_thresh`, `msg`, VT HTTP status, duration in milliseconds.
   `/v1/health` and the OpenAPI docs endpoints do not emit these lines.
 - Errors log the mapped `error.code` plus upstream detail.
+- With `CA_FILE` set, one startup line:
+  `{"event": "ca_file_loaded", "path": "<path>", "certificates": <n>}`. Certificate
+  contents never appear. `[D12]`
+- A `CA_FILE` that cannot be used ends the process with exactly one plain line
+  on stderr, `CA_FILE: <reason>: <path>`, and exit code 1; nothing follows it.
+  (A missing `VT_API_KEY` keeps pydantic's validation error, after a traceback.)
 - The API key never appears in any log line (including httpx debug output).
 
 ## 12. Testing contract
 
 - Unit/integration tests run **offline** against `docs/research/fixtures/`
   served through a mocked transport (`VT_BASE_URL` + httpx mock).
+- TLS trust (`CA_FILE`, §10) is tested against TLS servers on loopback, with
+  certificates generated per run and never committed — still offline. Those
+  requests go through the client a deployment builds, not a mocked transport.
 - A live smoke test suite (a handful of real calls, quota-cheap) is gated
   behind an env flag (e.g. `VT_LIVE_TESTS=1`) and never runs in CI.
 
@@ -348,6 +389,16 @@ and an implementer readback of this document:
   `INVALID_ARTIFACT` instead of a misleading `known: false` after a VT 404.
 - **[D11] Logs are JSON lines on stdout**; only lookup/search requests emit
   the per-request line.
+
+Approved by the maintainer 2026-10-29:
+
+- **[D12] `CA_FILE` adds CA trust; it never replaces it.** A PEM file of extra
+  authorities is added to the default trust of TLS with VirusTotal and checked
+  at startup: a file that cannot be used refuses the start with one line. The
+  TLS with an `https://` proxy endpoint itself keeps the default trust, because
+  httpx never hands the client's TLS context to a proxy taken from the
+  environment; that hop waits until a need for it appears. Verification is
+  never switched off.
 
 ## 14. Explicitly out of scope (v1)
 

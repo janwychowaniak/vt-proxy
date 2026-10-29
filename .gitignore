@@ -231,6 +231,11 @@ env/
 ENV/
 env.bak/
 
+# --------------- Deployment -----------------
+
+# the CA file compose.ca.yml mounts: local to each deployment
+ca.pem
+
 # --------------- AI -------------------------
 
 # Aider

@@ -49,7 +49,11 @@ Raw VT v3 is a fine API with a few ergonomic sharp edges when all you want is
 cp .env.example .env        # put your VT_API_KEY inside
 docker compose up -d        # legacy docker-compose works too
 curl http://127.0.0.1:11000/v1/health
+# {"status":"ok","name":"vt-proxy","version":"…","extra_ca":false}
 ```
+
+`extra_ca` turns `true` when the service trusts an extra certificate authority
+(`CA_FILE`, see [Deploying behind a corporate proxy](#deploying-behind-a-corporate-proxy)).
 
 Prebuilt images are published on version tags:
 `docker pull ghcr.io/janwychowaniak/vt-proxy:0.1.0` (`latest` tracks the
@@ -187,6 +191,7 @@ Environment variables (12-Factor; `.env` supported, see
 | `VT_BASE_URL` | no | `https://www.virustotal.com/api/v3` | override for tests/mocks |
 | `VT_TIMEOUT` | no | `30` | per-VT-request timeout, seconds |
 | `LOG_LEVEL` | no | `INFO` | log verbosity |
+| `CA_FILE` | no | — | PEM file of extra CA certificates, trusted in addition to the default ones; unset or empty: none ([corporate proxy](#deploying-behind-a-corporate-proxy)) |
 | `VT_PROXY_PORT` | no | `11000` | compose only: host port on `127.0.0.1` |
 | `HTTPS_PROXY` / `NO_PROXY` | no | — | standard egress-proxy variables, honored as-is |
 
@@ -210,24 +215,49 @@ VT_LIVE_TESTS=1 uv run pytest tests/test_live_smoke.py   # optional, needs a rea
 git config core.hooksPath .githooks       # once per clone: gitleaks commit/push guards
 ```
 
-Tests run entirely against captured VT responses
-(`docs/research/fixtures/`) through a mocked transport; CI never needs a key.
+Tests run against captured VT responses (`docs/research/fixtures/`) through a
+mocked transport, and the `CA_FILE` trust tests against TLS servers on loopback
+with certificates generated per run; CI never needs a key or the network.
 
 ## Deploying behind a corporate proxy
 
-Egress proxy is runtime configuration, not a code concern — set
-`HTTPS_PROXY`/`NO_PROXY` in the container environment. If your proxy
-intercepts TLS, add its CA in a thin derived image and point Python's trust
-at the system store:
+The egress proxy is runtime configuration: set `HTTPS_PROXY` / `NO_PROXY` in
+the container environment, and VT traffic goes through it.
 
-```dockerfile
-FROM ghcr.io/janwychowaniak/vt-proxy:0.1.0
-USER root
-COPY corp-ca.crt /usr/local/share/ca-certificates/
-RUN update-ca-certificates
-ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
-USER app
-```
+If the proxy intercepts TLS, give the service its certificate authority with
+`CA_FILE`, and run the published image unchanged:
+
+1. Put the proxy's CA certificate, in PEM, next to the compose files as
+   `ca.pem`: its root or, where the proxy signs with an intermediate, the
+   issuing chain (several certificates may share the file). The service runs
+   as uid 10001, so the file must be readable by it; a CA certificate is
+   public material, so mode `0644` is the natural choice.
+2. Start with the overlay that mounts the file read-only and sets the variable
+   (Compose v2):
+
+   ```bash
+   docker compose -f compose.yaml -f compose.ca.yml up -d
+   ```
+
+   Without `ca.pem`, `up` fails at the mount instead of creating anything.
+
+`GET /v1/health` then says `"extra_ca": true`, and the log holds one
+`ca_file_loaded` line with the number of certificates loaded. A file that
+cannot be used stops the start with one line, for example
+`CA_FILE: no such file: /etc/vt-proxy/ca.pem`.
+
+The certificates are trusted **in addition to** the default ones, never
+instead of them. *`CA_FILE` adds trust for TLS with VirusTotal, directly or
+through a proxy tunnel; the TLS with an `https://` proxy endpoint itself keeps
+the client's default trust (the system store and certifi's bundle).*
+
+Verification is never switched off: the authority, and the certificates the
+proxy issues under it, must pass Python's strict X.509 checks — CA basic
+constraints, a key usage that permits certificate signing, key identifiers,
+and subject alternative names on the issued certificates.
+
+`SSL_CERT_FILE` still works as a wholesale replacement of the default bundle;
+`CA_FILE` adds to whatever it selects.
 
 ## License
 
