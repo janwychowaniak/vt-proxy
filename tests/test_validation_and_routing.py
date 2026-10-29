@@ -95,3 +95,4 @@ def test_health(client):
     assert body["status"] == "ok"
     assert body["name"] == "vt-proxy"
     assert body["version"]
+    assert body["extra_ca"] is False  # always present; true only with CA_FILE (test_ca_file.py)

@@ -1,4 +1,5 @@
 import base64
+import ssl
 from typing import Any
 
 import httpx
@@ -54,7 +55,8 @@ class VTClient:
 
     Read-only by construction: only GET requests exist here. The underlying
     httpx client keeps trust_env enabled so standard proxy variables work
-    (SPEC §10).
+    (SPEC §10). `verify` is passed only when CA_FILE is set; without it the
+    client is built exactly as before CA_FILE existed.
     """
 
     def __init__(
@@ -63,12 +65,15 @@ class VTClient:
         api_key: str,
         timeout: float,
         transport: httpx.AsyncBaseTransport | None = None,
+        verify: ssl.SSLContext | None = None,
     ) -> None:
+        extra = {} if verify is None else {"verify": verify}
         self._client = httpx.AsyncClient(
             base_url=base_url,
             headers={"x-apikey": api_key},
             timeout=timeout,
             transport=transport,
+            **extra,
         )
 
     async def aclose(self) -> None:

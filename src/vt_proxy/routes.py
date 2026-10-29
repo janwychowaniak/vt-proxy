@@ -92,5 +92,11 @@ async def search_name(request: Request, body: SearchRequest) -> dict[str, Any]:
 
 
 @router.get("/health")
-async def health() -> dict[str, str]:
-    return {"status": "ok", "name": "vt-proxy", "version": pkg_version("vt-proxy")}
+async def health(request: Request) -> dict[str, Any]:
+    # extra_ca says only whether CA_FILE is in use: no path, no certificate detail
+    return {
+        "status": "ok",
+        "name": "vt-proxy",
+        "version": pkg_version("vt-proxy"),
+        "extra_ca": request.app.state.extra_ca,
+    }
