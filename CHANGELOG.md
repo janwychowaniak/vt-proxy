@@ -15,13 +15,18 @@ The image Id is what a host compares after `docker load` of a release file. On
 Docker's default `overlay2` image store, it is the digest of the image's
 configuration, which the archive carries byte for byte (see the README).
 
-## 0.2.0 — (pending: the date of the tag)
+## 0.2.0 — 2026-10-29
 
-`ghcr.io/janwychowaniak/vt-proxy@sha256:` (pending: from the release workflow's
-step summary)
+`ghcr.io/janwychowaniak/vt-proxy@sha256:e5d6593a78d54455ae44c8539d577c40baaee888fb70ac5b71df0905c18b5a5b`
 
-Image Id (configuration digest) `sha256:` (pending), after a pull and after
-`docker load` of the release file alike. Python (pending).
+Image Id (configuration digest)
+`sha256:fbf11f1cd2aebaa2716b1d5666f1f80e01583b9449eb934fb0bc92d469ccb775`, after
+a pull and after `docker load` of the release file alike. Python 3.13.18.
+
+Erratum: the release workflow's step summary shows
+`sha256:e5d6593a78d54455ae44c8539d577c40baaee888fb70ac5b71df0905c18b5a5b` as the
+image Id, because the runner's Docker uses the containerd image store, where
+`docker image inspect` reports the manifest digest.
 
 Extra CA trust without a derived image, and the image as a release file.
 
