@@ -56,7 +56,7 @@ curl http://127.0.0.1:11000/v1/health
 (`CA_FILE`, see [Deploying behind a corporate proxy](#deploying-behind-a-corporate-proxy)).
 
 Prebuilt images are published on version tags:
-`docker pull ghcr.io/janwychowaniak/vt-proxy:0.1.0` (`latest` tracks the
+`docker pull ghcr.io/janwychowaniak/vt-proxy:0.2.0` (`latest` tracks the
 newest release). The compose file uses that same `latest` name:
 `docker compose pull` fetches the published image, while
 `docker compose up -d --build` builds it from your checkout.
@@ -241,6 +241,22 @@ If the proxy intercepts TLS, give the service its certificate authority with
 
    Without `ca.pem`, `up` fails at the mount instead of creating anything.
 
+   The legacy `docker-compose` 1.x rejects `create_host_path`. With it, use
+   the short bind syntax in an overlay of your own instead:
+
+   ```yaml
+   services:
+     vt-proxy:
+       environment:
+         CA_FILE: /etc/vt-proxy/ca.pem
+       volumes:
+         - ./ca.pem:/etc/vt-proxy/ca.pem:ro
+   ```
+
+   Without `ca.pem`, Docker then creates a root-owned directory of that name
+   and the service refuses to start with `not a regular file`, so put the file
+   in place before `up`.
+
 `GET /v1/health` then says `"extra_ca": true`, and the log holds one
 `ca_file_loaded` line with the number of certificates loaded. A file that
 cannot be used stops the start with one line, for example
@@ -258,6 +274,51 @@ and subject alternative names on the issued certificates.
 
 `SSL_CERT_FILE` still works as a wholesale replacement of the default bundle;
 `CA_FILE` adds to whatever it selects.
+
+## Using a release file on a host without registry access
+
+From 0.2.0, every release on GitHub carries the published image as a file,
+`vt-proxy-<version>.tar.gz` (the image saved by its full tag), with
+`vt-proxy-<version>.tar.gz.sha256` beside it. On the target host:
+
+```bash
+sha256sum -c vt-proxy-0.2.0.tar.gz.sha256
+docker load -i vt-proxy-0.2.0.tar.gz
+docker image inspect --format '{{.Id}}' ghcr.io/janwychowaniak/vt-proxy:0.2.0
+```
+
+The last line must print the image Id (configuration digest) that
+[`CHANGELOG.md`](CHANGELOG.md) records for the version. The Id survives the
+transfer where the registry digest does not: on Docker's default `overlay2`
+image store it is the digest of the image's configuration, which the archive
+carries byte for byte. The release workflow loads every archive back into a
+store without the image, and compares the Id, before it attaches the file.
+
+The same Id can be checked without Docker: the archive's `manifest.json` names
+the configuration blob, and that blob's SHA-256 is the Id.
+
+```bash
+config=$(tar -xzOf vt-proxy-0.2.0.tar.gz manifest.json | grep -o '"Config":"[^"]*"' | cut -d'"' -f4)
+tar -xzOf vt-proxy-0.2.0.tar.gz "$config" | sha256sum   # the Id, without "sha256:"
+```
+
+The archive loads under `ghcr.io/janwychowaniak/vt-proxy:0.2.0`, while the
+shipped `compose.yaml` names `…:latest`. Either retag the loaded image:
+
+```bash
+docker tag ghcr.io/janwychowaniak/vt-proxy:0.2.0 ghcr.io/janwychowaniak/vt-proxy:latest
+```
+
+or pin the version in an override file of your own, for example
+`compose.pin.yml`, used as `docker compose -f compose.yaml -f compose.pin.yml up -d`:
+
+```yaml
+services:
+  vt-proxy:
+    image: ghcr.io/janwychowaniak/vt-proxy:0.2.0
+```
+
+Either way, start without `--build`: the image is already there.
 
 ## License
 

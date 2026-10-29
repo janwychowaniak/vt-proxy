@@ -1,6 +1,6 @@
 [project]
 name = "vt-proxy"
-version = "0.1.0"
+version = "0.2.0"
 description = "Read-only VirusTotal API v3 reputation proxy with a stable, analyst-friendly JSON envelope"
 readme = "README.md"
 license = { file = "LICENSE" }
