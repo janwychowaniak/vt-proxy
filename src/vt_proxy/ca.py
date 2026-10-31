@@ -9,8 +9,6 @@ import re
 import ssl
 import stat
 
-import httpx
-
 # The loader takes PEM text as ASCII only (cadata=str), while OpenSSL's own file loader
 # reads bytes. A leading UTF-8 BOM is dropped, as OpenSSL drops it, and every other
 # non-ASCII byte becomes "?": outside a PEM block that changes nothing, inside one it fails
@@ -54,10 +52,3 @@ def load_ca_file(path: str) -> tuple[str, int]:
     if count == 0:
         raise CAFileError(f"CA_FILE: no certificate could be loaded (none found): {path}")
     return pem, count
-
-
-def union_context(pem: str) -> ssl.SSLContext:
-    """httpx's own default context, read from the environment as httpx reads it, plus pem."""
-    context = httpx.create_ssl_context()
-    context.load_verify_locations(cadata=pem)
-    return context

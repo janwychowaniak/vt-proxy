@@ -12,100 +12,28 @@ import re
 import ssl
 import subprocess
 import sys
-import threading
-from collections.abc import Callable, Iterator
-from contextlib import contextmanager
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from collections.abc import Callable
 from pathlib import Path
 
 import certifi
 import pytest
 import trustme
-from conftest import UNKNOWN_SHA256
-from fastapi.testclient import TestClient
+from conftest import (
+    API_KEY,
+    NO_UPSTREAM,
+    assert_reached,
+    assert_refused,
+    leaf_from,
+    pem_file,
+    proxy_for,
+    upstream,
+)
 
 from vt_proxy.ca import CAFileError, load_ca_file
 from vt_proxy.config import Settings
 from vt_proxy.main import create_app
 
-API_KEY = "test-key-never-printed"
-NO_UPSTREAM = "https://vt.invalid/api/v3"  # for tests that make no lookup
-# what the client takes from the environment: proxies, and its own default trust
-CLIENT_ENV = (
-    "HTTP_PROXY",
-    "HTTPS_PROXY",
-    "ALL_PROXY",
-    "NO_PROXY",
-    "http_proxy",
-    "https_proxy",
-    "all_proxy",
-    "no_proxy",
-    "SSL_CERT_FILE",
-    "SSL_CERT_DIR",
-)
-
-
-@pytest.fixture(autouse=True)
-def isolated_client_env(monkeypatch: pytest.MonkeyPatch) -> None:
-    for name in CLIENT_ENV:
-        monkeypatch.delenv(name, raising=False)
-
-
-class _UnknownToVT(BaseHTTPRequestHandler):
-    """Answers every GET the way VT answers for an unknown IOC."""
-
-    def do_GET(self) -> None:
-        body = json.dumps({"error": {"code": "NotFoundError", "message": "not found"}}).encode()
-        self.send_response(404)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
-
-    def log_message(self, *args: object) -> None:  # keep the test output clean
-        pass
-
-
-@contextmanager
-def upstream(leaf: trustme.LeafCert) -> Iterator[str]:
-    """An HTTPS upstream on loopback presenting `leaf`; yields its base URL."""
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    leaf.configure_cert(context)
-    server = ThreadingHTTPServer(("127.0.0.1", 0), _UnknownToVT)
-    server.socket = context.wrap_socket(server.socket, server_side=True)
-    threading.Thread(target=server.serve_forever, daemon=True).start()
-    try:
-        yield f"https://127.0.0.1:{server.server_address[1]}/api/v3"
-    finally:
-        server.shutdown()
-        server.server_close()
-
-
-def leaf_from(ca: trustme.CA) -> trustme.LeafCert:
-    return ca.issue_cert("127.0.0.1")
-
-
-def proxy_for(base_url: str, ca_file: str | None = None) -> TestClient:
-    """The service as a deployment builds it: settings in, real transport."""
-    settings = Settings(vt_api_key=API_KEY, vt_base_url=base_url, ca_file=ca_file, _env_file=None)
-    return TestClient(create_app(settings=settings), raise_server_exceptions=False)
-
-
-def pem_file(path: Path, *blobs: trustme.Blob) -> str:
-    path.write_bytes(b"".join(blob.bytes() for blob in blobs))
-    return str(path)
-
-
-def assert_reached(client: TestClient) -> None:
-    response = client.post("/v1/score/file", json={"artifact": UNKNOWN_SHA256})
-    assert response.status_code == 200
-    assert response.json()["known"] is False  # the upstream's 404, mapped as always
-
-
-def assert_refused(client: TestClient) -> None:
-    response = client.post("/v1/score/file", json={"artifact": UNKNOWN_SHA256})
-    assert response.status_code == 504  # the transport-error path, as for any failed TLS
-    assert response.json()["error"]["code"] == "UPSTREAM_TIMEOUT"
+pytestmark = pytest.mark.usefixtures("isolated_client_env")
 
 
 def startup_lines(stdout: str) -> list[dict]:
@@ -251,6 +179,7 @@ def test_with_ca_file_health_says_true_and_one_line_counts_the_certificates(tmp_
         "name": "vt-proxy",
         "version": body["version"],
         "extra_ca": True,
+        "x509_strict": True,
     }
     [line] = startup_lines(capsys.readouterr().out)
     del line["ts"]

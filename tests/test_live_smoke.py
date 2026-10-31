@@ -21,10 +21,13 @@ EICAR_MD5 = "44d88612fea8a8f36de82e1278abb02f"
 
 def _client():
     from vt_proxy.config import Settings
+    from vt_proxy.tls import upstream_context
     from vt_proxy.vt import VTClient
 
     settings = Settings()
-    return VTClient(settings.vt_base_url, settings.vt_api_key, settings.vt_timeout)
+    # the context with CA_FILE and X509_STRICT unset
+    verify = upstream_context(None, strict=True)
+    return VTClient(settings.vt_base_url, settings.vt_api_key, settings.vt_timeout, verify)
 
 
 def _run(coro):

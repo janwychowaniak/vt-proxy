@@ -32,8 +32,9 @@ jobs:
       # below then use the image the archive loaded back.
       - name: Archive round trip (save by tag, remove, load, compare Id)
         run: .github/scripts/archive-image.sh vt-proxy ci -  # no record: this image is never pushed
-      # Both runs: a read-only root filesystem and no tmpfs, since the service writes nothing,
-      # with or without CA_FILE. A dummy key: health and pre-validation need no VT.
+      # All three runs: a read-only root filesystem and no tmpfs, since the service writes
+      # nothing, with or without CA_FILE and X509_STRICT. A dummy key: health and
+      # pre-validation need no VT.
       - name: Smoke-test read-only, without CA_FILE
         run: |
           docker run -d --name vt-proxy-smoke --read-only -p 127.0.0.1:11000:8000 \
@@ -46,6 +47,7 @@ jobs:
           echo "$health"
           grep -q '"status":"ok"' <<< "$health"
           grep -q '"extra_ca":false' <<< "$health"
+          grep -q '"x509_strict":true' <<< "$health"
           code=$(curl -s -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:11000/v1/score \
             -H 'Content-Type: application/json' -d '{"artifact": "garbage input"}')
           test "$code" = "422"
@@ -68,4 +70,19 @@ jobs:
           health=$(curl -fsS http://127.0.0.1:11001/v1/health) || { docker logs vt-proxy-smoke-ca; exit 1; }
           echo "$health"
           grep -q '"extra_ca":true' <<< "$health"
+          grep -q '"x509_strict":true' <<< "$health"
           docker rm -f vt-proxy-smoke-ca
+      - name: Smoke-test read-only, with X509_STRICT=false
+        run: |
+          docker run -d --name vt-proxy-smoke-strict --read-only -p 127.0.0.1:11002:8000 \
+            -e VT_API_KEY=ci-dummy-key -e X509_STRICT=false vt-proxy:ci
+          for _ in $(seq 1 20); do
+            curl -fsS http://127.0.0.1:11002/v1/health >/dev/null 2>&1 && break
+            sleep 1
+          done
+          health=$(curl -fsS http://127.0.0.1:11002/v1/health) || { docker logs vt-proxy-smoke-strict; exit 1; }
+          echo "$health"
+          grep -q '"x509_strict":false' <<< "$health"
+          # exactly one startup warning says the checks are relaxed
+          test "$(docker logs vt-proxy-smoke-strict 2>&1 | grep -c '"event": "x509_strict_disabled"')" = 1
+          docker rm -f vt-proxy-smoke-strict

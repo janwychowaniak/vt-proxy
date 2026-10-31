@@ -12,6 +12,7 @@ from .errors import (
     UPSTREAM_TIMEOUT,
     AppError,
 )
+from .tls import is_strict, strict_hint
 
 
 def url_id(url: str) -> str:
@@ -55,8 +56,9 @@ class VTClient:
 
     Read-only by construction: only GET requests exist here. The underlying
     httpx client keeps trust_env enabled so standard proxy variables work
-    (SPEC §10). `verify` is passed only when CA_FILE is set; without it the
-    client is built exactly as before CA_FILE existed.
+    (SPEC §10). `verify` is the upstream TLS context of SPEC §10, passed in
+    every configuration; with VERIFY_X509_STRICT on it, a failure that only
+    that flag causes gets a hint in its message (SPEC §9).
     """
 
     def __init__(
@@ -64,16 +66,16 @@ class VTClient:
         base_url: str,
         api_key: str,
         timeout: float,
+        verify: ssl.SSLContext,
         transport: httpx.AsyncBaseTransport | None = None,
-        verify: ssl.SSLContext | None = None,
     ) -> None:
-        extra = {} if verify is None else {"verify": verify}
+        self._strict = is_strict(verify)
         self._client = httpx.AsyncClient(
             base_url=base_url,
             headers={"x-apikey": api_key},
             timeout=timeout,
             transport=transport,
-            **extra,
+            verify=verify,
         )
 
     async def aclose(self) -> None:
@@ -83,9 +85,10 @@ class VTClient:
         try:
             return await self._client.get(path, params=params)
         except httpx.TransportError as exc:
-            raise AppError(
-                504, UPSTREAM_TIMEOUT, f"VT unreachable or timed out ({type(exc).__name__})"
-            ) from exc
+            message = f"VT unreachable or timed out ({type(exc).__name__})"
+            if self._strict:
+                message += strict_hint(exc)
+            raise AppError(504, UPSTREAM_TIMEOUT, message) from exc
 
     async def get_json(
         self, path: str, params: dict[str, Any] | None = None

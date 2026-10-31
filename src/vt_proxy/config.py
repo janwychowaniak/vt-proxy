@@ -11,6 +11,7 @@ class Settings(BaseSettings):
 
     CA_FILE is only a path here. The file is checked in the app factory, so a
     refusal can print one line of its own (SPEC §10); unset or empty means absent.
+    X509_STRICT is only text here, for the same reason; unset or empty means true.
     """
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
@@ -20,3 +21,4 @@ class Settings(BaseSettings):
     vt_timeout: float = 30.0
     log_level: str = "INFO"
     ca_file: str | None = None
+    x509_strict: str | None = None

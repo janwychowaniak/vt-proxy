@@ -10,6 +10,7 @@ from .log import request_line
 from .schemas import ScoreRequest, SearchRequest
 from .score import score_artifact
 from .search import search_by_name
+from .tls import is_strict
 from .vt import VTClient
 
 router = APIRouter(prefix="/v1")
@@ -93,10 +94,12 @@ async def search_name(request: Request, body: SearchRequest) -> dict[str, Any]:
 
 @router.get("/health")
 async def health(request: Request) -> dict[str, Any]:
-    # extra_ca says only whether CA_FILE is in use: no path, no certificate detail
+    # extra_ca says only whether CA_FILE is in use: no path, no certificate detail;
+    # x509_strict is read from the upstream context, not from the setting (SPEC §10)
     return {
         "status": "ok",
         "name": "vt-proxy",
         "version": pkg_version("vt-proxy"),
         "extra_ca": request.app.state.extra_ca,
+        "x509_strict": is_strict(request.app.state.tls),
     }
