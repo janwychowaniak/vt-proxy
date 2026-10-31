@@ -1,7 +1,8 @@
 # vt-proxy — functional specification
 
 **Status: APPROVED (2026-07-29; amended 2026-07-30 — post-audit fixes and
-decisions D9–D11; amended 2026-10-29 — `CA_FILE`, decision D12).** This file is
+decisions D9–D11; amended 2026-10-29 — `CA_FILE`, decision D12; amended
+2026-10-31 — `X509_STRICT`, decision D13).** This file is
 the source of truth for implementation. Design decisions are marked `[D#]` inline and recorded in
 [§13](#13-decision-record); observed VT behavior they build on is documented
 in [`research/NOTES.md`](research/NOTES.md).
@@ -59,16 +60,19 @@ services) a **simpler and more stable contract than raw VT**:
 | `POST /v1/score/url` | reputation of a URL |
 | `POST /v1/score` | **omni**: auto-detect artifact type, then behave as the matching endpoint `[D3]` |
 | `POST /v1/search/name` | name→hash lookup via VT Intelligence search |
-| `GET /v1/health` | liveness: static `ok`, app name/version, whether `CA_FILE` is in use; no VT call |
+| `GET /v1/health` | liveness: static `ok`, app name/version, whether `CA_FILE` is in use, whether the strict X.509 checks are on; no VT call |
 
 Upstream mapping: `/files/{hash}`, `/ip_addresses/{ip}`, `/domains/{domain}`,
 `/urls/{base64url(url) without padding}`, `/intelligence/search`.
 
 Health response shape:
-`200 {"status": "ok", "name": "vt-proxy", "version": "<package version>", "extra_ca": false}`.
+`200 {"status": "ok", "name": "vt-proxy", "version": "<package version>", "extra_ca": false, "x509_strict": true}`.
 `extra_ca` is always present: `true` when `CA_FILE` is set and loaded (§10),
 `false` otherwise. Nothing else about the file appears — no path, fingerprints
-or subjects.
+or subjects. `x509_strict` is always present, too. It says whether the context
+that verifies TLS with VirusTotal carries Python's strict X.509 checks, and it
+is read from that context itself. It is `false` only when `X509_STRICT=false`
+has cleared them (§10, `[D13]`).
 
 ## 5. Score endpoints — request
 
@@ -275,6 +279,14 @@ artifact, type mismatch for the endpoint, `"` in `name`) are
 | known path, wrong HTTP method | 405 | `METHOD_NOT_ALLOWED` |
 | unexpected internal failure | 500 | `INTERNAL` |
 
+**A failed TLS verification** is a connect error: 504 `UPSTREAM_TIMEOUT`.
+Some failures are caused only by the strict X.509 checks (§10, `[D13]`). When
+one of them occurs while the checks are on, its message names OpenSSL's reason
+and points at the setting, for example `VT unreachable or timed out
+(ConnectError); TLS: Basic Constraints of CA cert not marked critical, see
+X509_STRICT`. Status and code stay the same, and the error log line carries
+the same message.
+
 **Never an error**: VT 404 `NotFoundError` on a well-formed artifact → HTTP
 200, `known: false` (§6) or empty `matches` (§8).
 
@@ -297,6 +309,7 @@ Environment variables, loaded and validated at startup via pydantic-settings
 | `VT_TIMEOUT` | no | `30` | per-VT-request timeout, seconds |
 | `LOG_LEVEL` | no | `INFO` | log verbosity |
 | `CA_FILE` | no | — (unset or empty: absent) | PEM file of extra certificate authorities, trusted in addition to the default ones `[D12]` |
+| `X509_STRICT` | no | `true` (unset or empty) | `false` clears Python's strict X.509 checks on TLS with VirusTotal; verification stays on `[D13]` |
 
 Listen address/port are deployment concerns (uvicorn/compose), not app config.
 
@@ -315,25 +328,58 @@ with an intermediate, the issuing chain.
   VirusTotal: httpx's own default context, read from the environment as httpx
   reads it (`SSL_CERT_FILE`, else `SSL_CERT_DIR`, else certifi's bundle).
   Nothing from the default set is dropped. Unset or empty means absent, and the
-  client is then built exactly as without the variable.
-- Verification is never switched off. Hostname checking, the TLS 1.2 minimum
-  and Python's strict X.509 checks stay as the client sets them, so the
-  authority, and the certificates the proxy issues under it, must be
-  well-formed under them (CA basic constraints, a key usage that permits
-  certificate signing, key identifiers, subject alternative names on the
-  issued certificates). A failed verification is a transport error
-  (§9: `504 UPSTREAM_TIMEOUT`).
+  context is then httpx's default one.
+- Verification is never switched off.
+  - Hostname checking and the TLS 1.2 minimum stay as the client sets them.
+  - Python's strict X.509 checks stay as well, unless `X509_STRICT=false`
+    (below).
+  - Under those checks, the authority and the certificates the proxy issues
+    under it must be well-formed: CA basic constraints marked critical, a key
+    usage that permits certificate signing, key identifiers, and subject
+    alternative names on the issued certificates. `X509_STRICT` exists for an
+    authority that cannot meet this.
+  - A failed verification is a transport error (§9: `504 UPSTREAM_TIMEOUT`).
 - The file is read once, at startup; a replaced file takes effect on restart.
   Text outside the PEM blocks never decides — the certificate loader does.
   Startup checks neither validity dates nor CA flags: every certificate the
   file yields is counted and trusted.
 - The service refuses to start when the file is missing, cannot be read, is
   not a regular file, or yields no certificate (§11).
-- **The limit:** `CA_FILE` adds trust for TLS with VirusTotal, directly or
-  through a proxy tunnel; the TLS with an `https://` proxy endpoint itself
-  keeps the client's default trust (the system store and certifi's bundle).
+- **The limit:** `CA_FILE` and `X509_STRICT` apply to TLS with VirusTotal,
+  directly or through a proxy tunnel; the TLS with an `https://` proxy endpoint
+  itself keeps the client's default trust (the system store and certifi's
+  bundle) and its strict checks.
 - `SSL_CERT_FILE` still works as a wholesale replacement of the default
   bundle; `CA_FILE` adds to whatever it selects.
+
+**Strict X.509 checks (`X509_STRICT`)** `[D13]`. Python 3.13's default TLS
+context sets `ssl.VERIFY_X509_STRICT`, so OpenSSL enforces RFC 5280 rules on
+every certificate in the chain. One of them requires a CA certificate to mark
+its Basic Constraints critical (RFC 5280 §4.2.1.9). An intercepting authority
+without that marker is refused, even when `CA_FILE` trusts it.
+
+- `X509_STRICT=false` clears that one flag on the context that verifies TLS
+  with VirusTotal. Everything else stays:
+  - the chain is still verified against the trusted authorities, `CA_FILE`
+    included;
+  - the hostname is still checked;
+  - the other flags, partial-chain verification among them, are untouched;
+  - the TLS 1.2 minimum stays.
+
+  `true` sets the flag, whatever the interpreter's default.
+- The values are `true` and `false`, in any case, with surrounding whitespace
+  ignored. Unset or empty means `true`. Any other value refuses the start
+  (§11), including `1`, `yes`, `on` and a value of only whitespace.
+- The relaxation reaches every chain the service verifies, the public
+  VirusTotal chain included. The flag also gates more than Basic Constraints
+  criticality: it covers key identifiers, key usage and names as well. It is an
+  opt-in for an authority that cannot be reissued, not a default.
+- The service always hands the client this context: httpx's default one, plus
+  `CA_FILE`, with the flag decided last.
+- The setting is visible in three places:
+  - health reports the flag as the context carries it (§4);
+  - a relaxed start logs one warning (§11);
+  - a failure that only the flag causes says so in its message (§9).
 
 ## 11. Logging
 
@@ -347,18 +393,26 @@ with an intermediate, the issuing chain.
 - With `CA_FILE` set, one startup line:
   `{"event": "ca_file_loaded", "path": "<path>", "certificates": <n>}`. Certificate
   contents never appear. `[D12]`
+- With `X509_STRICT=false`, one startup line at warning level:
+  `{"event": "x509_strict_disabled"}`, with no other fields. When `CA_FILE` is
+  also set, this line follows `ca_file_loaded`. `[D13]`
 - A `CA_FILE` that cannot be used ends the process with exactly one plain line
   on stderr, `CA_FILE: <reason>: <path>`, and exit code 1; nothing follows it.
-  (A missing `VT_API_KEY` keeps pydantic's validation error, after a traceback.)
+- An `X509_STRICT` that is neither true nor false ends the process the same
+  way, with `X509_STRICT: expected true or false: <value>`. The value appears as
+  given, in Python's `repr`. It is checked before `CA_FILE` is read.
+- A missing `VT_API_KEY` keeps pydantic's validation error, after a traceback.
 - The API key never appears in any log line (including httpx debug output).
 
 ## 12. Testing contract
 
 - Unit/integration tests run **offline** against `docs/research/fixtures/`
   served through a mocked transport (`VT_BASE_URL` + httpx mock).
-- TLS trust (`CA_FILE`, §10) is tested against TLS servers on loopback, with
-  certificates generated per run and never committed — still offline. Those
-  requests go through the client a deployment builds, not a mocked transport.
+- TLS trust and checks (`CA_FILE`, `X509_STRICT`, §10) are tested against TLS
+  servers on loopback, with certificates generated per run and never committed,
+  so the suite stays offline. Among the generated authorities is one whose
+  Basic Constraints and Key Usage are not marked critical. These requests go
+  through the client a deployment builds, not a mocked transport.
 - A live smoke test suite (a handful of real calls, quota-cheap) is gated
   behind an env flag (e.g. `VT_LIVE_TESTS=1`) and never runs in CI.
 
@@ -399,6 +453,18 @@ Approved by the maintainer 2026-10-29:
   httpx never hands the client's TLS context to a proxy taken from the
   environment; that hop waits until a need for it appears. Verification is
   never switched off.
+
+Approved by the maintainer 2026-10-31:
+
+- **[D13] `X509_STRICT` relaxes RFC 5280 conformance, never verification.**
+  - It is opt-in; the default is strict.
+  - `false` clears only `ssl.VERIFY_X509_STRICT`, on the context that verifies
+    TLS with VirusTotal, directly or through a proxy tunnel. The TLS with an
+    `https://` proxy endpoint keeps its default context.
+  - The chain is still verified against the trusted authorities, the hostname
+    is still checked, `CA_FILE` still adds trust, and the other flags and the
+    TLS 1.2 minimum stay.
+  - Health shows the state, and a relaxed start logs one warning.
 
 ## 14. Explicitly out of scope (v1)
 

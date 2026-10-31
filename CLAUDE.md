@@ -24,8 +24,9 @@ flagged the IOC).
 - **Localhost-only, no auth by design.** Intended for callers on the same
   trusted machine; the container port must be published on `127.0.0.1` only.
 - **TLS verification is never switched off.** `CA_FILE` only adds certificate
-  authorities to the default trust; no setting disables verification
-  (`docs/SPEC.md` §10, `[D12]`).
+  authorities to the default trust, and `X509_STRICT` relaxes RFC 5280
+  conformance checks, never verification; no setting disables verification
+  (`docs/SPEC.md` §10, `[D12]`, `[D13]`).
 - **The VT API key lives in the environment** (`.env` locally, never
   committed). Never print, log, or copy it into fixtures, docs, or commit
   messages. Gitleaks hooks + CI enforce secret hygiene; activate hooks once
