@@ -76,9 +76,15 @@ Every public step (push, tag) needs the maintainer's explicit word.
    CI must be green on it.
 2. **Tag:** an **annotated** `v<version>`, whose message is `vt-proxy
    <version>`, a blank line, then that entry's notes.
-   - Build the message from the entry; never retype it.
+   - Build the message from the entry; never retype it. The notes are the
+     entry's paragraphs without the digest line, the image Id paragraph and
+     errata. Both `v0.2.0` and `v0.3.0` follow this rule byte for byte.
    - Show the full text to the maintainer before tagging.
-   - Compare the created tag's message with the text before pushing it.
+   - Create the tag with `git tag -a --cleanup=verbatim -F <file>`.
+   - Compare the created tag's message with the text before pushing it: the
+     message part of `git cat-file tag` must equal the file byte for byte.
+     Do not compare against `git tag --format='%(contents)'`, which prints an
+     extra newline.
 
    `release.yml` refuses a lightweight tag, or a tag that does not match
    `pyproject.toml`, before anything is built.
@@ -119,7 +125,9 @@ next release's log.
   passing VT's v3 error semantics through where sensible.
 - All lookup endpoints are read-only in semantics regardless of the HTTP
   method chosen for transport (see `docs/SPEC.md`).
-- Tests run offline against captured fixtures, and the `CA_FILE` trust tests
-  against TLS servers on loopback with certificates generated per run
-  (`trustme`, a dev-only dependency). Optional live smoke tests are gated
-  behind an env flag.
+- Tests run offline against captured fixtures. The `CA_FILE` and
+  `X509_STRICT` tests run against TLS servers on loopback, with certificates
+  generated per run (`trustme` and `cryptography`, both dev-only dependencies).
+  Optional live smoke tests are gated behind an env flag and never run in CI,
+  so a change to anything they call (such as `VTClient`) must be checked by
+  hand.
