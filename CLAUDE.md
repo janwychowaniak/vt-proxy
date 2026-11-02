@@ -35,16 +35,15 @@ flagged the IOC).
   committed). Never print, log, or copy it into fixtures, docs, or commit
   messages. Gitleaks hooks + CI enforce secret hygiene; activate hooks once
   per clone: `git config core.hooksPath .githooks`. The add-on rules in
-  `.gitleaks.toml` are prefix-anchored on purpose — the built-in generic rule
-  is not a reliable fallback; the file explains why. Measure any change to
+  `.gitleaks.toml` are anchored on a literal prefix or an explicit assignment
+  context on purpose — the built-in generic rule is not a reliable fallback;
+  the file explains why. Measure any change to
   them against a corpus of fake keys before committing.
 
 ## Language
 
 Everything that lands in the repository — code, comments, commit messages,
-docs — is English only. In conversation, mirror the language the maintainer
-uses (often Polish); that never changes the English-only rule for repo
-content.
+docs — is English only.
 
 ## Toolchain
 
@@ -66,14 +65,19 @@ content.
   smoke tests; require a real key in `.env`
 - Local run:
   `uv run uvicorn --factory vt_proxy.main:create_app --host 127.0.0.1 --port 11000`
+- Commits go straight to `main`: no feature branches, no PRs. Every public
+  step (push, tag) needs the maintainer's explicit word.
+- Before a push, mutation-check new tests: break each mechanism they guard, in
+  a separate process, and confirm that the break turns them red. A new check in
+  a CI smoke step is first run against the real entrypoint's output.
 
 ## Release
 
-Every public step (push, tag) needs the maintainer's explicit word.
-
 1. **Release commit** on `main`:
    - bump `version` in `pyproject.toml`, then run `uv lock`;
-   - move the README's `docker pull` example to the new version;
+   - move the README's `docker pull` example to the new version, and only that
+     line: the examples of the release-file section stay at 0.2.0, which the
+     section's "From 0.2.0" anchors;
    - add the `CHANGELOG.md` entry: the notes, with placeholders for the date,
      the digest, the image Id (configuration digest) and the Python.
 
@@ -82,7 +86,8 @@ Every public step (push, tag) needs the maintainer's explicit word.
    <version>`, a blank line, then that entry's notes.
    - Build the message from the entry; never retype it. The notes are the
      entry's paragraphs without the digest line, the image Id paragraph and
-     errata. Both `v0.2.0` and `v0.3.0` follow this rule byte for byte.
+     errata. `v0.2.0`, `v0.3.0` and `v0.4.0` follow this rule byte for byte,
+     so a script that builds the message is checked on them first.
    - Show the full text to the maintainer before tagging.
    - Create the tag with `git tag -a --cleanup=verbatim -F <file>`.
    - Compare the created tag's message with the text before pushing it: the
