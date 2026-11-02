@@ -15,6 +15,33 @@ The image Id is what a host compares after `docker load` of a release file. On
 Docker's default `overlay2` image store, it is the digest of the image's
 configuration, which the archive carries byte for byte (see the README).
 
+## 0.4.0 — (pending: the date of the tag)
+
+`ghcr.io/janwychowaniak/vt-proxy@sha256:` (pending: from the release workflow's
+step summary)
+
+Image Id (configuration digest) `sha256:` (pending), after a pull and after
+`docker load` of the release file alike. Python (pending).
+
+A breaking change: every request field takes its JSON type, and what 0.3.0
+coerced is refused.
+
+- positives_thresh, days_ago and limit take a JSON integer, and artifact,
+  name and msg a JSON string (msg also null, meaning absent). A value of
+  another type is 422 VALIDATION_ERROR. 0.3.0 read "5" and 5.0 as 5, true as
+  1 and false as 0; 0.4.0 refuses them. Unknown fields, ranges, defaults and
+  the null rules are unchanged.
+- A 405 METHOD_NOT_ALLOWED now carries the Allow header that names the
+  path's method: POST on the lookup and search paths, GET on /v1/health. Its
+  body is unchanged.
+- docs/ENVELOPE.md is the envelope contract (version 1) this service shares
+  with its sibling, abuseipdb-proxy; the SPEC's decision D14 records how this
+  service implements it.
+
+Unchanged: the /v1 paths, the response envelope, the error codes and statuses,
+the VirusTotal calls, CA_FILE, X509_STRICT, the configuration variables, and
+the non-root, classic-builder-compatible image on its Debian 13 base.
+
 ## 0.3.0 — 2026-10-31
 
 `ghcr.io/janwychowaniak/vt-proxy@sha256:61738435b20b9806f3358bcda7700ac7ed5eab6503a8e3e521311503297db7c4`
