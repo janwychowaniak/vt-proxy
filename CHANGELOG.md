@@ -15,13 +15,13 @@ The image Id is what a host compares after `docker load` of a release file. On
 Docker's default `overlay2` image store, it is the digest of the image's
 configuration, which the archive carries byte for byte (see the README).
 
-## 0.4.0 — (pending: the date of the tag)
+## 0.4.0 — 2026-11-02
 
-`ghcr.io/janwychowaniak/vt-proxy@sha256:` (pending: from the release workflow's
-step summary)
+`ghcr.io/janwychowaniak/vt-proxy@sha256:03b0da2609746025af6ee36f6420602b5da07bdacdd096ac7642723508fc4404`
 
-Image Id (configuration digest) `sha256:` (pending), after a pull and after
-`docker load` of the release file alike. Python (pending).
+Image Id (configuration digest)
+`sha256:7629436b9c130da9037506692965d22bb631ff0baaea239c64fdaa6ba1bdeeda`, after
+a pull and after `docker load` of the release file alike. Python 3.13.18.
 
 A breaking change: every request field takes its JSON type, and what 0.3.0
 coerced is refused.
