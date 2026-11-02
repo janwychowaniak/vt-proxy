@@ -2,7 +2,8 @@
 
 **Status: APPROVED (2026-07-29; amended 2026-07-30 — post-audit fixes and
 decisions D9–D11; amended 2026-10-29 — `CA_FILE`, decision D12; amended
-2026-10-31 — `X509_STRICT`, decision D13).** This file is
+2026-10-31 — `X509_STRICT`, decision D13; amended 2026-11-02 — the family's
+envelope contract, decision D14).** This file is
 the source of truth for implementation. Design decisions are marked `[D#]` inline and recorded in
 [§13](#13-decision-record); observed VT behavior they build on is documented
 in [`research/NOTES.md`](research/NOTES.md).
@@ -47,8 +48,10 @@ services) a **simpler and more stable contract than raw VT**:
   UTF-8.
 - Unknown fields in request bodies are **rejected** (`422`) — catches typos
   like `positives_tresh` instead of silently ignoring them.
-- Interactive OpenAPI docs (`/docs`, `/openapi.json`) stay enabled — the
-  service is localhost-only.
+- Interactive OpenAPI docs stay enabled at FastAPI's defaults (`/docs`,
+  `/redoc`, `/openapi.json`). Enabling them adds no outbound call: the service
+  serves two HTML pages and the JSON document, and their assets load in the
+  reader's browser from public CDNs. `[D14]`
 
 ## 4. Endpoints overview
 
@@ -87,6 +90,9 @@ IOC type:
 }
 ```
 
+- Every field takes its JSON type: `artifact` a string, `positives_thresh` an
+  integer, `msg` a string or `null` (absent). Any other type is a shape failure
+  (§9), never coerced: `"5"`, `5.0` and `true` are not integers here. `[D14]`
 - `artifact` is validated with **ioc-typing** before any VT call. Typed
   endpoints require the matching type; mismatch or unrecognizable input is a
   `422`, *not* a VT roundtrip.
@@ -183,6 +189,9 @@ Request:
 }
 ```
 
+- Every field takes its JSON type: `name` a string, `days_ago` and `limit`
+  integers, `msg` a string or `null` (absent). Any other type is a shape
+  failure (§9), never coerced. `[D14]`
 - VT query: `name:"<name>" ls:<today(UTC) - days_ago>+` (last-submission
   recency window; the `ls:` modifier is verified live — research NOTES §7).
   The `name` is embedded in a VT query string — hence the hard ban on `"`
@@ -263,7 +272,7 @@ Boundary between the two 422 codes: **shape** failures (missing, empty or
 mistyped fields, out-of-range values, unknown fields, unparseable JSON) are
 `VALIDATION_ERROR`; **content** failures (unrecognized or unsupported
 artifact, type mismatch for the endpoint, `"` in `name`) are
-`INVALID_ARTIFACT`.
+`INVALID_ARTIFACT`. A mistyped field is never coerced. `[D14]`
 
 | Situation | HTTP | `error.code` |
 |---|---|---|
@@ -276,7 +285,7 @@ artifact, type mismatch for the endpoint, `"` in `name`) are
 | VT unreachable / connect error / client-side timeout / VT's own 504 `DeadlineExceededError` | 504 | `UPSTREAM_TIMEOUT` `[D9]` |
 | VT 200 but response fails our minimal structure validation | 502 | `UPSTREAM_SCHEMA` |
 | unknown path on this API | 404 | `NOT_FOUND` |
-| known path, wrong HTTP method | 405 | `METHOD_NOT_ALLOWED` |
+| known path, wrong HTTP method; the `Allow` header names the method the path takes | 405 | `METHOD_NOT_ALLOWED` |
 | unexpected internal failure | 500 | `INTERNAL` |
 
 **A failed TLS verification** is a connect error: 504 `UPSTREAM_TIMEOUT`.
@@ -465,6 +474,27 @@ Approved by the maintainer 2026-10-31:
     is still checked, `CA_FILE` still adds trust, and the other flags and the
     TLS 1.2 minimum stay.
   - Health shows the state, and a relaxed start logs one warning.
+
+Approved by the maintainer 2026-11-02:
+
+- **[D14] One envelope for the family.** This service answers in the shape it
+  shares with its sibling, abuseipdb-proxy, written down as
+  [`docs/ENVELOPE.md`](ENVELOPE.md) (contract version 1). This document states
+  this service's instance of it.
+  - The contract is the shape this service already had: `POST` lookups under
+    `/v1`, the four-key envelope, the error body and its codes, and
+    `GET /v1/health` with both trust fields.
+  - Every request field takes its JSON type. Another type is a shape failure,
+    never coerced: a coercion would turn a caller's slip into a silently
+    different query (pydantic's lax mode reads `true` as the integer 1).
+  - A 405 keeps the `Allow` header the framework computes for the path
+    (RFC 9110 §15.5.6).
+  - The OpenAPI documents stay enabled at FastAPI's defaults (`/docs`,
+    `/redoc`, `/openapi.json`). Enabling them adds no outbound call, since
+    their pages load their assets in the reader's browser.
+  - A change to the contract is a change for the family: it bumps the
+    contract's version, never fits this service alone, and needs the
+    maintainer's word.
 
 ## 14. Explicitly out of scope (v1)
 

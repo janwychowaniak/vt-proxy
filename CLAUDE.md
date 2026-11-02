@@ -12,6 +12,10 @@ analyst-friendly JSON envelope with an explicit flag-score (how many vendors
 flagged the IOC).
 
 - Functional specification: `docs/SPEC.md` — the source of truth.
+- `docs/ENVELOPE.md` is the family's envelope contract, which D14 implements.
+  It is kept identical to abuseipdb-proxy's copy, so a change to it is a change
+  for the family: it bumps the contract version, never fits this service alone,
+  and needs the maintainer's word.
 - Research notes and captured VT v3 responses: `docs/research/`.
 
 ## Hard constraints (never violate)

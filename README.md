@@ -12,6 +12,10 @@ at (how many vendors flagged the IOC) extracted into an explicit score.
 Built for local callers (SOAR pipelines, scripts, other services) sharing one
 paid VT API key on a trusted machine.
 
+**0.4.0 refuses what 0.3.0 coerced:** a request field of another JSON type,
+such as `"5"`, `5.0` or `true` for an integer, is now `422 VALIDATION_ERROR`,
+where 0.3.0 read it as 5, 5 or 1; see [`CHANGELOG.md`](CHANGELOG.md).
+
 ## Why
 
 Raw VT v3 is a fine API with a few ergonomic sharp edges when all you want is
@@ -69,6 +73,11 @@ newest release). The compose file uses that same `latest` name:
 All lookup endpoints are `POST` with a JSON body — read-only in semantics,
 POST in transport, so URLs and free-text fields travel safely (the same
 pattern as Elasticsearch `_search`).
+
+Every field takes its JSON type, and an unknown field is refused. The API is
+the envelope this service shares with its sibling,
+[abuseipdb-proxy](https://github.com/janwychowaniak/abuseipdb-proxy):
+[`docs/ENVELOPE.md`](docs/ENVELOPE.md) is the family's contract.
 
 | Endpoint | Method | Purpose |
 |---|---|---|
