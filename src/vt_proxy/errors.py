@@ -1,3 +1,4 @@
+from collections.abc import Mapping
 from typing import Any
 
 from fastapi import FastAPI, Request
@@ -51,7 +52,7 @@ def _respond(
     code: str,
     message: str,
     upstream: dict[str, Any] | None = None,
-    headers: dict[str, str] | None = None,
+    headers: Mapping[str, str] | None = None,
 ) -> JSONResponse:
     error_line(status=status_code, code=code, message=message, upstream=upstream)
     return JSONResponse(
@@ -77,7 +78,10 @@ async def _http_exception_handler(request: Request, exc: StarletteHTTPException)
     if exc.status_code == 404:
         return _respond(404, NOT_FOUND, "unknown path")
     if exc.status_code == 405:
-        return _respond(405, METHOD_NOT_ALLOWED, "method not allowed for this path")
+        # Starlette's Allow header stays: RFC 9110 §15.5.6 requires it on a 405 (D14).
+        return _respond(
+            405, METHOD_NOT_ALLOWED, "method not allowed for this path", headers=exc.headers
+        )
     return _respond(exc.status_code, INTERNAL, str(exc.detail))
 
 

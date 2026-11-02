@@ -4,9 +4,13 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ScoreRequest(BaseModel):
-    """Uniform body of all five score endpoints (SPEC §5)."""
+    """Uniform body of all five score endpoints (SPEC §5).
 
-    model_config = ConfigDict(extra="forbid")
+    Strict JSON types (D14): a field of another type is a shape failure, never
+    coerced, so "5", 5.0 or true is not read as an integer.
+    """
+
+    model_config = ConfigDict(extra="forbid", strict=True)
 
     artifact: str = Field(min_length=1)
     positives_thresh: int = Field(default=1, ge=0)
@@ -14,13 +18,13 @@ class ScoreRequest(BaseModel):
 
 
 class SearchRequest(BaseModel):
-    """Body of /v1/search/name (SPEC §8).
+    """Body of /v1/search/name (SPEC §8), in strict JSON types as ScoreRequest (D14).
 
     The double-quote ban on `name` is a content rule (INVALID_ARTIFACT), not a
     shape rule, so it lives in the service layer — not here (SPEC §9 boundary).
     """
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", strict=True)
 
     name: str = Field(min_length=1)
     days_ago: int = Field(default=30, ge=1)
